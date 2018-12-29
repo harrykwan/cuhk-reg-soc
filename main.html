@@ -1,0 +1,857 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+    <script type="text/javascript" src="https://js.live.net/v7.2/OneDrive.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-firestore.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyBI7Ji3XUH1AaASHAST2j6aj7YUuzKB-R0",
+        authDomain: "cuhk-reg-soc.firebaseapp.com",
+        databaseURL: "https://cuhk-reg-soc.firebaseio.com",
+        projectId: "cuhk-reg-soc",
+        storageBucket: "",
+        messagingSenderId: "351403710743"
+      };
+      firebase.initializeApp(config);
+      var db = firebase.firestore();
+
+        // Disable deprecated features
+        db.settings({
+          timestampsInSnapshots: true
+        });
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!--     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>CUHK REG SOC</title>
+
+    <!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> -->
+    <style type="text/css">
+        
+        .ok{
+            background-color: #222222;
+            box-shadow: 2px 1px 3px #555555;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            /*font-size: 15px;*/
+        }
+
+        tr{
+            height: 50px;
+        }
+
+        .filelistarea{
+
+        }
+
+        .forma{
+            border: 1px solid white;
+            border-radius: 3px;
+            background: black;
+            color: white;
+            /*padding: 1px;*/
+            width: 150px;
+            font-size: 15px;
+            font-family: ‘cwTeXYen’,'Noto Sans Tc',/*'FontAwesome', sans-serif;*/'Roboto', sans-serif;
+
+        }
+
+        .date{
+            width: 100px;
+        }
+        
+        .memberlist{
+            width: 100%;
+            background-color: black;
+            color: white;
+            font-size: 13px;
+        }
+
+        .submitbutton{
+            margin-left: 80%;
+            font-size: 20px;
+        }
+
+        .submitbutton:hover{
+            background: #555555;
+        }
+
+        .alert {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            padding: 20px;
+            color: white;
+            opacity: .8;
+            transition: opacity 0.6s;
+            margin-bottom: 15px;
+            background-color: white;
+            color: black;
+            width: 10%;
+            font-size: 20px;
+        }
+
+        .alert:hover{
+            
+        }
+
+        .closebtn {
+          margin-left: 15px;
+          color: black;
+          font-weight: bold;
+          float: right;
+          font-size: 22px;
+          line-height: 20px;
+          cursor: pointer;
+          transition: 0.3s;
+        }
+
+        .closebtn:hover {
+          color: grey;
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- <button id="callGraphButton" type="button" onclick="callGraphApi()">Call Microsoft Graph API</button> -->
+<!-- <div id="errorMessage" class="text-danger"></div> -->
+
+<!-- <button id="signOutButton" type="button" onclick="signOut()">Sign out</button> -->
+
+<!-- This app uses cdn to reference msal.js (recommended). 
+     You can also download it from: https://github.com/AzureAD/microsoft-authentication-library-for-js -->
+<script src="https://secure.aadcdn.microsoftonline-p.com/lib/0.1.3/js/msal.min.js"></script>
+
+<!-- The 'bluebird' and 'fetch' references below are required if you need to run this application on Internet Explorer -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.min.js"></script>
+<script src="https://harrykwan.github.io/cuhk-reg-soc/societylist.js"></script>
+<script type="text/javascript" src="msalconfig.js"></script>
+    <div id="googleformarea" hidden>
+        <iframe name="googleform"></iframe>
+
+        <form id="form" action="https://docs.google.com/forms/d/e/1FAIpQLSdCOpwSr3UsqSJ9ky4j7NKTFTzCmLxXzzAiQNHaKSv6YgY7Cw/formResponse" target="googleform" method="POST" onsubmit="checkdone(0)">
+            <input id="googleforminput1" type="text" name="entry.2045469385" value="">
+            <input id="googleforminput2" type="text" name="entry.1431600269" value="">
+            <input id="googleforminput3" type="text" name="entry.1528364708" value="">
+        </form>
+        
+    </div>
+    <div class="alert" id="myalert" hidden>
+      <span class="closebtn" onclick="closebtn()">&times;</span>  
+      <strong>Done!</strong>
+    </div>
+
+    <script type="text/javascript">
+        function closebtn(){
+            // document.getElementById("myalert").style.opacity = 0;
+            document.getElementById("myalert").hidden = true;
+        }
+    </script>
+
+    <script type="text/javascript">
+        var loopcheck, loopcheck2;
+        var senddone = 1, firstin = 0;
+        function checkdone(x) {
+            // alert('hi');
+            for (var j=1; j<=6; j++)
+                document.getElementById("ok"+j).disabled = true;
+            loopcheck = setInterval(function(){
+                var tempframe = document.getElementById("i_frame");
+                senddone = 1;
+                firstin = 1;
+                // console.log(senddone);
+                // console.log(tempframe.contentDocument);
+                // console.log(tempframe.contentWindow.location.href);
+                if (tempframe.contentDocument){
+                    senddone = 0;
+                }
+            },200);
+            loopcheck2 = setInterval(function(){
+                if (firstin&&senddone){
+                    clearInterval(loopcheck);
+                    clearInterval(loopcheck2);
+                    var tempframe = document.getElementById("i_frame");
+                    // tempframe.src = "";
+                    if (x==1)
+                        showok();
+                    for (var j=1; j<=6; j++)
+                        document.getElementById("ok"+j).disabled = false;
+                    tempframe.src = "";
+                }
+            },200);
+        }
+    </script>
+
+    <div id="onedriveupload" hidden>
+        <input id="fileUploadControl" name="fileUploadControl" type="file" />
+        <button onclick="launchSaveToOneDrive('fileUploadControl')">Save to OneDrive</button>
+        <input id="fileUploadControl1" name="fileUploadControl1" type="file" />
+        <button id="ok1" onclick="launchSaveToOneDrive('fileUploadControl1')">Save to OneDrive</button>
+        <input id="fileUploadControl2" name="fileUploadControl2" type="file" />
+        <button id="ok2" onclick="launchSaveToOneDrive('fileUploadControl2')">Save to OneDrive</button>
+        <input id="fileUploadControl3" name="fileUploadControl3" type="file" />
+        <button id="ok3" onclick="launchSaveToOneDrive('fileUploadControl3')">Save to OneDrive</button>
+        <input id="fileUploadControl4" name="fileUploadControl4" type="file" />
+        <button id="ok4" onclick="launchSaveToOneDrive('fileUploadControl4')">Save to OneDrive</button>
+        <input id="fileUploadControl5" name="fileUploadControl5" type="file" />
+        <button id="ok5" onclick="launchSaveToOneDrive('fileUploadControl5')">Save to OneDrive</button>
+        <input id="fileUploadControl6" name="fileUploadControl6" type="file" />
+        <button id="ok6" onclick="launchSaveToOneDrive('fileUploadControl6')">Save to OneDrive</button>
+        
+    </div>
+
+        <script type="application/javascript">
+            var myip;
+          function getIP(json) {
+            console.log("ip address: ", json.ip);
+            myip = json.ip;
+          }
+        </script>
+
+        <script type="application/javascript" src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
+
+        <script type="text/javascript">
+            var fileget;
+            
+          function launchSaveToOneDrive(nowfile){
+            // console.log(getObjectURL(document.getElementById("fileUploadControl").files[0]))
+            var odOptions = {
+              clientId: "66992713-6f8f-46c1-bf2a-5304dbcc391a",
+              action: "save",
+              sourceInputElementId: nowfile,
+              sourceUri: "",
+              fileName: "",
+              openInNewWindow: true,
+              advanced: {
+                redirectUri: "https://harrykwan.github.io/cuhk-reg-soc/main.html"
+              },
+              success: function(files) {
+                console.log(files);
+                fileget = files.value[0]["@microsoft.graph.downloadUrl"];
+                console.log(fileget);
+                console.log(files.value[0].name);
+                if (document.getElementById("filelistarea").innerHTML==''){
+                    document.getElementById("filelistarea").innerHTML="<div class='mainbodytitle'>Upload History:</div><br><table id='filelisttable' margin-top:20px; style='margin:30px; margin-left: 100px;  width: 70%;''></table>";
+                }
+                var table = document.getElementById("filelisttable");
+                var row = table.insertRow(table.rows.length);
+                var cell1 = row.insertCell(0);
+                cell1.innerHTML = files.value[0].name;
+                savefilelist();
+                document.getElementById("googleforminput3").value = files.value[0].name+'|'+fileget;
+                document.getElementById("form").submit();
+                checkdone(1);
+              },
+              progress: function(p) { console.log(p); },
+              cancel: function() { /* cancel handler */console.log('cancel') },
+              error: function(e) { console.log(e); }
+            }
+            OneDrive.save(odOptions);
+          }
+        </script>
+
+    <div id="loginbox" hidden>
+        <br>
+        <h1 class="h1login">中大學生會<br>屬下團體登記系統</h1>
+        <!-- <h1 class="h1login">CUSU<br>SOCIETIES REGISTRY</h1> -->
+
+        <div id="login">
+
+            <input type="submit" value="以中大@link登入" onclick="callGraphApi()">
+
+        </div> <!-- end login -->
+
+        <div id="loginfoot">
+            <div class="botinfo">登記狀態 ｜ 常用資料 ｜ 聯繫屬委</div>
+            <hr class="myhr1">
+            <div class="botinfo">香港中文大學學生會代表會<br>屬下團體委員會</div>
+        </div> <!-- end of loginfoot -->
+
+
+
+    </div> <!-- end loginbox -->
+
+    <div id="mainpage" hidden>
+        <div id="mainhead">
+            <h1 class="h1mainhead">中大屬會登記</h1>
+            <hr>
+            <div id="showusernamearea"></div>
+        </div> <!-- end of main head -->
+        <div id="mainframe">
+            <!-- <table style="width: 100%;">
+                <tr style="width: 100%;">
+                    <td style="width: 50%;"><iframe style="width: 100%;" src="mainframe.html"></iframe></td>
+                    <td style="width: 50%;"><iframe style="width: 100%;" src="mainframe.html"></iframe></td>
+                </tr>
+            </table> -->
+            <div id="maintitle"></div>
+            <div id="mainbody"></div>
+            
+        </div> <!--  end of main frame -->
+    </div> <!-- end of main page -->
+
+    <div hidden id="formaarea" style="position: fixed; left: 0; right: 0; margin-left: auto; margin-right: auto; width: 80%; top: 100px; height: 70%; background: black; color: white; opacity: 0.8; padding:20px; overflow: hidden; border: 2px solid white;border-radius: 5px; font-size: 16px;">
+        <div style="overflow: scroll; height: 110%; width: 110%;">
+            <div class="mainbodytitle" style="background-color: black; color: white; border: none;">表格A</div>
+            <table id="forma" style=" width: 80%;margin-left: 10%; margin-top: 3%;">
+            <tr><td>屬下團體名稱: </td><td><input class="forma" type="text" name=""></td></tr>
+            <tr><td>團體性質:</td><td><select class="forma">
+              <option value="國際生學生會">國際生學生會</option>
+              <option value="院/系會">院/系會</option>
+              <option value="學會/認可會社">學會/認可會社</option>
+            </select></td></tr>
+            <tr><td>幹事會(或同等行政機構)任期</td><td><input class="forma" type="text" name=""></td></tr>
+            <tr><td>是否為臨時行政機構</td><td><select class="forma">
+              <option value="是臨時行政機構">是</option>
+              <option value="不是臨時行政機構">否</option>
+            </select></td></tr>
+            <tr><td>是否設有代表會(或同等監察機構)</td><td><select class="forma">
+              <option value="是設有代表會">是</option>
+              <option value="不是設有代表會">否</option>
+            </select></td></tr>
+            <tr><td>代表會(或同等監察機構)任期 </td><td><input class="forma" type="text" name=""></td></tr>
+            <tr><td>聯絡人姓名:</td><td><input class="forma" type="text" name=""></td></tr>
+            <tr><td>聯絡電話:</td><td><input class="forma" type="text" name=""></td></tr>
+            <tr><td>聯絡電郵:</td><td><input class="forma" type="text" name=""></td></tr>
+            </table>
+            <hr>
+            <table style=" width: 80%;margin-left: 10%; margin-top: 3%;">
+            <tr><td style="width: 70%;">請輸入幹事會(或同等行政機構)成員人數：</td><td><input onchange="genmembertable(this,'')" class="forma" type="text" name=""></td></tr>
+            </table>
+            <table id="membertable" style=" width: 80%;margin-left: 10%; margin-top: 3%; border: none;">
+                <tr style="border-bottom: 1px solid grey;"><td>職位</td><td>中文名稱</td><td>英文名稱</td><td>學生證編號</td><td>書院</td><td>學系</td><td>學年</td><td>電話</td></tr>
+            </table>
+            <hr>
+            <table style=" width: 80%;margin-left: 10%; margin-top: 3%;">
+            <tr><td style="width: 70%;">請輸入代表會(或同等監察機構)成員名單人數(如有)：</td><td><input onchange="genmembertable(this,'2')" class="forma" type="text" name=""></td></tr>
+            </table>
+            <table id="membertable2" style=" width: 80%;margin-left: 10%; margin-top: 3%; border: none;">
+                <tr style="border-bottom: 1px solid grey;"><td>職位</td><td>中文名稱</td><td>英文名稱</td><td>學生證編號</td><td>書院</td><td>學系</td><td>學年</td><td>電話</td></tr>
+            </table>
+             <button onclick="doneforma()" style="margin-top: 20px; width: 80px; margin-left: 82%; font-size: 13px; padding: 5px; color: white; background: black; border: 1px solid white; border-radius: 5px;">Done</button>
+            <br><br><br><br><br>
+            <div onclick="closeforma()" style="position: fixed; color: white; background: black; top:110px; right:10%;">X</div>
+
+        </div>
+
+    </div>
+
+
+
+    <script type="text/javascript" src="app.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            // $("#loginbox").hide().fadeIn("slow");
+            // mylogin();
+            // checkCookie();
+        });
+
+        function setCookie(cname,cvalue,exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            var expires = "expires=" + d.toGMTString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for(var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+
+        var nowstatus;
+        var nowfilelist;
+        function checkstatus(x){
+            var docRef = db.collection("societystatus").doc(x);
+
+            docRef.get().then(function(doc) {
+                if (doc.exists) {
+                    // console.log("Document data:", doc.data());
+                    console.log(doc.data().status);
+                    nowstatus = doc.data().status;
+                    if (nowstatus==0){
+                        //first state: form a
+                        document.getElementById("mainframe").innerHTML = '<div class="mainbodytitle">上載登記文件(一）</div><table style="margin:30px; margin-left: 100px;  width: 70%;"><tr><td>表格A 基本資料</td><td><button class="ok" onclick="fillforma()">Fill In</button></td></tr>'
+                         + '<tr><td>表格B 選舉報告</td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl2"+"'"+').click()">Upload File</button></td></tr>'
+                         + '<tr><td>表格D 補充資料、錄音連結</td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl3"+"'"+').click()">Upload File</button></tr>'
+                         + '<tr><td>表格E 聲明</td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl4"+"'"+').click()">Upload File</button></td></tr></table>';
+
+                        for (var j=1; j<=4; j++){
+                            document.getElementById("fileUploadControl"+j).onchange =  function(){
+                                document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
+                                document.getElementById("googleforminput2").value = mysociety+"|step1|form"+this.id[17];
+                                document.getElementById("ok"+this.id[17]).click();                                
+                            }
+                        }
+                        document.getElementById("mainframe").innerHTML +=  "<div class='filelistarea' id='filelistarea'></div>";
+
+                        document.getElementById("mainframe").innerHTML += "<button onclick='submitall()' class='mainbodytitle submitbutton'>提交申請</button>";
+                    
+
+                    } else if (nowstatus==2){
+                        document.getElementById("mainframe").innerHTML = '<div class="mainbodytitle">上載登記文件(二）</div><table style="margin:30px; margin-left: 100px;  width: 70%;"><tr><td>表格C1 會議表決紀錄 或 表格C2 全民投票紀錄</td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl5"+"'"+').click()">Upload File</button></td></tr>'
+                         + '<tr><td><ul><li> 去屆工作報告（首屆除外）</li><li> 去屆財政報告（首屆除外）</li><li> 現屆工作計劃</li><li> 現屆財政預算</li><li> 會員名單（屬會適用)＊</li></ul></td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl6"+"'"+').click()">Upload File</button></td></tr><tr><td></td></tr></table>';
+                        for (var j=5; j<=6; j++){
+                            document.getElementById("fileUploadControl"+j).onchange =  function(){
+                                document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
+                                document.getElementById("googleforminput2").value = mysociety+"|step2|form"+this.id[17];
+                                document.getElementById("ok"+this.id[17]).click();                                
+                            }
+                        }
+                        document.getElementById("mainframe").innerHTML +=  "<div class='filelistarea' id='filelistarea'></div>";
+
+                        document.getElementById("mainframe").innerHTML += "<button onclick='submitall()' class='mainbodytitle submitbutton'>提交申請</button>";
+                    } else if (nowstatus==1||nowstatus==3){
+                        document.getElementById("mainframe").innerHTML = '<div style="text-align: center;""><div style="text-align: center; margin:50px; font-size:20px; " class="m">完成遞交!<br><br>屬下團體委員會將會審核你的申請。</div></div>';
+                    } else if (nowstatus==4){
+                        var docRef = db.collection("societymemberlist").doc(mysociety);
+
+                        docRef.get().then(function(doc) {
+                            if (doc.exists) {
+                                // console.log("Document data:", doc.data());
+                                var chinnum = ['零','一','二','三','四','五','六','七','八','九','十'];
+                                var d = new Date();
+                                var n = d.getFullYear()+1;
+                                document.getElementById("mainframe").innerHTML = '<div style="text-align: center;""><div style="text-align: center; margin:50px; font-size:20px; " class="m">申請已被接納!<br><br></div></div>';
+                                document.getElementById("mainframe").innerHTML += '<div id="socshit"><div style="background-color: white; color black; height: 200px; overflow: hidden;"><img style="width: 100%;" src="regsocpaper.png"></div>    <div style="background-color: white; color: black; text-align: center; padding: 20px;">        <h1 style="font-size: 18px;">香港中文大學學生會<br>屬下團體登記證明書</h1>      <br>根據《屬下團體章則》第三十三條發出<br><br><br><br>        <div style="width: 700px; text-align: left; margin: 0 auto;">茲證明「'+mysociety+'」已按照《屬下團體章則》第31條之規定完成週年登記，有 效期至'+chinnum[(n+'')[0]]+chinnum[(n+'')[1]]+chinnum[(n+'')[2]]+chinnum[(n+'')[3]]+'年一月三十一日止。            <br><br>            以下為上述團體在週年登記時提供的幹事資料:        </div>        <br><br><br> <table style="border-collapse: collapse; margin: 0 auto; width: 70%;" id="memberlisttable"><tr style="height: 20px;"><td style="border: 1px solid black;">職位</td><td style="border: 1px solid black;">中文姓名</td><td style="border: 1px solid black; ">英文姓名</td><td style="border: 1px solid black;">學生編號</td></tr></table>          <br><br>  <div style="width: 700px; text-align: left; margin: 0 auto;">如有任何查詢，請以電郵 cuhkrc.acsc@gmail.com 聯絡本委員會。</div><br><br><br><br>  <div style="width: 700px; text-align: left; margin: 0 auto;">香港中文大學學生會代表會</div><br><br><br><br></div></div>';
+                                var mymemberlist = doc.data().memberlist.split('|');
+                                var table = document.getElementById("memberlisttable");
+                                
+                                for (var j=0; j<(mymemberlist.length-1)/5; j++){
+                                    var row = table.insertRow(table.rows.length);
+                                    row.style.height = "20px";
+                                    var cell1 = row.insertCell(0);
+                                    var cell2 = row.insertCell(1);
+                                    var cell3 = row.insertCell(2);
+                                    var cell4 = row.insertCell(3);
+                                    cell1.innerHTML = mymemberlist[j*5+1];
+                                    cell2.innerHTML = mymemberlist[j*5+2];
+                                    cell3.innerHTML = mymemberlist[j*5+3];
+                                    cell4.innerHTML = mymemberlist[j*5+4];
+                                    cell1.style.border = '1px solid black';
+                                    cell2.style.border = '1px solid black';
+                                    cell3.style.border = '1px solid black';
+                                    cell4.style.border = '1px solid black';
+                                    cell1.style.padding = '2px';
+                                    cell2.style.padding = '2px';
+                                    cell3.style.padding = '2px';
+                                    cell4.style.padding = '2px';
+
+                                }
+                                document.getElementById("socshit").onclick = function(){
+                                    PrintElem(document.getElementById("socshit"));
+                                }
+                                PrintElem(document.getElementById("socshit"));
+                            } else {
+                                // doc.data() will be undefined in this case
+                                console.log("No such document!");
+                            }
+                        }).catch(function(error) {
+                            console.log("Error getting document:", error);
+                        });
+
+                        
+                        // var mywindow = window.open("regsocpaper.html", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=1000,left=1000,width=1000,height=1000");
+
+                    }
+
+                    
+
+                    if (doc.data().filelist){
+                        // console.log(doc.data().filelist);
+                        nowfilelist = doc.data().filelist;
+                        var tempnowfilelist = nowfilelist.split('|');
+
+                        document.getElementById("filelistarea").innerHTML="<div class='mainbodytitle'>Upload History:</div><br><table id='filelisttable' style='margin:30px; margin-left: 100px;  width: 70%;''></table>";
+
+            
+                        var table = document.getElementById("filelisttable");
+                        
+                        for (var j=0; j<tempnowfilelist.length-1; j++){
+                            var row = table.insertRow(0);
+                            var cell1 = row.insertCell(0);
+                            cell1.innerHTML = tempnowfilelist[j];
+                        }    
+                    }
+
+
+                } else {
+                    // doc.data() will be undefined in this case
+                    console.log("No such document!");
+                }
+            }).catch(function(error) {
+                console.log("Error getting document:", error);
+            });
+        }
+
+        function fillforma(){
+            document.getElementById("formaarea").hidden = false;
+
+        }
+
+        var mysociety;
+        function checkCookie() {
+            mysociety=getCookie("society");
+            // alert(mysociety);
+            if (mysociety != "") {
+                document.getElementById("showusernamearea").innerHTML =myuserdata.displayName+ ' @ <span onclick="changesociety()">'+mysociety+"</span>";
+                document.getElementById("mainframe").innerHTML = '';
+                checkstatus(mysociety);
+            } else {
+                var tempoutput = '<div class="mainbodytitle">選擇所屬團體</div><br><div class="choosesocietybox"><div class="societybox">';
+                for (var j=0; j<societylist.length; j++){
+                    tempoutput += '<div class="societylist" onclick="choosesociety(this)">'+societylist[j].name+'</div>';
+                }
+                tempoutput+='<div style="height: 20px;"></div></div><input placeholder="Search Here" id="societyinput" class="societyinput" onkeydown="helpchoose(this)" type="text"></div>'
+                document.getElementById("mainframe").innerHTML = tempoutput;
+            }
+        }
+
+        function choosesociety(x){
+            if (confirm(x.innerHTML+"?")){
+                setCookie("society", x.innerHTML, 1);
+                checkCookie();
+            }
+            // document.getElementById("societyinput").value = x.innerHTML;
+        }
+
+        function changesociety(){
+            if (confirm("你要登入其他學會嗎?")){
+                setCookie("society", "", 1);
+                checkCookie();
+            }
+        }
+
+        function helpchoose(x){
+            window.setTimeout(function(){
+                // console.log(x.value);
+                var tempsocietylist = document.getElementsByClassName("societylist");
+                for (var j=0; j<tempsocietylist.length; j++){
+                    if (tempsocietylist[j].innerHTML.indexOf(x.value)!=-1||societylist[j].id.indexOf(x.value)!=-1){
+                        // console.log(tempsocietylist[j].innerHTML);
+                        tempsocietylist[j].hidden = false;
+                    } else {
+                        tempsocietylist[j].hidden = true;
+                    }
+                }
+            },100)
+            
+        }
+
+        function genmembertable(x,y){
+            var table = document.getElementById("membertable"+y);
+            while (table.rows.length>1){
+                table.deleteRow(table.rows.length-1);
+            }
+            if (x.value<30&&x.value>0){
+                for (var j=0; j<x.value; j++){
+                var row = table.insertRow(table.rows.length);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+                var cell5 = row.insertCell(4);
+                var cell6 = row.insertCell(5);
+                var cell7 = row.insertCell(6);
+                var cell8 = row.insertCell(7);
+                cell1.innerHTML = "<input class='memberlist' type='text' value=''>";
+                cell2.innerHTML = "<input class='memberlist' type='text' value=''>";
+                cell3.innerHTML = "<input class='memberlist' type='text' value=''>";
+                cell4.innerHTML = "<input class='memberlist' type='text' value=''>";
+                cell5.innerHTML = "<input class='memberlist' type='text' value=''>";
+                cell6.innerHTML = "<input class='memberlist' type='text' value=''>";
+                cell7.innerHTML = "<input class='memberlist' type='text' value=''>";
+                cell8.innerHTML = "<input class='memberlist' type='text' value=''>";
+            }
+            }
+            
+            
+        }
+
+        function mylogin() {
+            $("#loginbox").hide();
+            $("#mainpage").fadeIn();        
+        }
+
+        function closeforma(){
+            document.getElementById("formaarea").hidden = true;
+        }
+
+        function doneforma(){
+            var memberlist = document.getElementById("membertable").getElementsByTagName("input");
+            var memberlist2 = document.getElementById("membertable2").getElementsByTagName("input");
+            var forma1 = document.getElementById("forma").getElementsByTagName("input");
+            var forma2 = document.getElementById("forma").getElementsByTagName("select");
+            var tempans = '';
+
+            var tempmemberlist='';
+            
+            for (var j=0; j<forma1.length; j++){
+                tempans += forma1[j].value+'|';                
+            }
+            for (var j=0; j<forma2.length; j++){
+                tempans += forma2[j].value+'|';                
+            }
+            for (var j=0; j<memberlist.length; j++){
+                if ((j)%8==0)
+                    tempans += 'student'+(j/8+1)+'|';
+                tempans += memberlist[j].value+'|';     
+
+                if (j%8==0)
+                    tempmemberlist += 'student'+(j/8+1)+'|';
+                if (j%8==0||j%8==1||j%8==2||j%8==3)
+                    tempmemberlist += memberlist[j].value+'|';
+
+            }
+
+            for (var j=0; j<memberlist2.length; j++){
+                if ((j)%8==0)
+                    tempans += 'student'+(j/8+1)+'|';
+                tempans += memberlist2[j].value+'|';
+            }
+            // console.log(tempans);
+            // console.log(tempmemberlist);
+            document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
+            document.getElementById("googleforminput2").value = mysociety+"|step1|form1";
+            document.getElementById("googleforminput3").value = tempans;
+            document.getElementById("form").submit();
+            checkdone(1);
+            if (document.getElementById("filelistarea").innerHTML==''){
+                document.getElementById("filelistarea").innerHTML="<div class='mainbodytitle'>Upload History:</div><br><table id='filelisttable' style='margin:30px; margin-left: 100px;  width: 70%;''></table>";
+            }
+            var table = document.getElementById("filelisttable");
+            var row = table.insertRow(table.rows.length);
+            var cell1 = row.insertCell(0);
+            cell1.innerHTML = "Form A";
+            savefilelist();
+
+            var docRef = db.collection("societymemberlist").doc(mysociety);
+            docRef.set({
+                memberlist: tempmemberlist
+            })
+            .then(function(){
+
+            })
+            .catch(function(error){
+
+            });
+
+            document.getElementById("formaarea").hidden = true;
+            
+        }
+
+        function savefilelist(){
+            var tempfilelist = '';
+            var filelisttable = document.getElementById("filelisttable");
+            for (var j=0; j<filelisttable.rows.length; j++){
+                tempfilelist += filelisttable.rows[j].cells[0].innerHTML+'|';
+            }
+
+            var docRef = db.collection("societystatus").doc(mysociety);
+            docRef.set({
+                filelist: tempfilelist,
+                status: nowstatus
+            })
+            .then(function(){
+                nowfilelist = tempfilelist;
+            })
+            .catch(function(error){
+                console.log(error);
+            });
+
+        }
+
+        function submitall(){
+            if (confirm("Are you sure?")){
+                document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
+                document.getElementById("googleforminput2").value = mysociety+"|step1";
+                document.getElementById("googleforminput3").value = nowfilelist;
+                document.getElementById("form").submit();
+                console.log(nowstatus)
+                nowstatus++;
+                console.log(nowstatus)
+                var docRef = db.collection("societystatus").doc(mysociety);
+                docRef.set({
+                    filelist: '',
+                    status: nowstatus
+                })
+                .then(function(){
+                    location.reload();
+                })
+                .catch(function(error){
+                    console.log(error);
+                });
+            }
+            
+
+        }
+
+        function showok(){
+            document.getElementById("myalert").hidden = false;
+            window.setTimeout(function(){
+                closebtn();
+            },3000);
+        }
+
+        function PrintElem(elem){
+            var mywindow = window.open('', 'PRINT', 'height=1600,width=1000');
+
+            mywindow.document.write('<html><head><title>' +  '</title>');
+            mywindow.document.write('</head><body>');
+            mywindow.document.write(elem.innerHTML);
+            mywindow.document.write('</body></html>');
+
+            // mywindow.document.close(); // necessary for IE >= 10
+            // mywindow.focus(); // necessary for IE >= 10*/
+
+
+                // mywindow.print();
+            // mywindow.close();
+
+            return true;
+        }
+
+    </script>
+
+    <script type="text/javascript" src="main.js"></script>
+
+
+
+
+    <!-- <div id="myExcelDiv" style="width: 402px; height: 346px"></div>
+    <script type="text/javascript" src="http://r.office.microsoft.com/r/rlidExcelWLJS?v=1&kip=1"></script>
+    <script type="text/javascript">
+        /*
+        * This code uses the Microsoft Office Excel JavaScript object model to programmatically insert the
+        * Excel Web App into a div with id=myExcelDiv. The full API is documented at
+        * http://msdn.microsoft.com/en-us/library/hh315812.aspx. There you can find out how to programmatically get
+        * values from your Excel file and how to use the rest of the object model. 
+        */
+
+        // Use this file token to reference Book1.xlsx in the Excel APIs
+        var fileToken = "SD310A16DD64ED7E41!112/3533661997762444865/";
+        var ewa = null;
+
+        // Run the Excel load handler on page load.
+        if (window.attachEvent)
+        {
+            window.attachEvent("onload", loadEwaOnPageLoad);
+        } else
+        {
+            window.addEventListener("DOMContentLoaded", loadEwaOnPageLoad, false);
+        }
+
+        function loadEwaOnPageLoad()
+        {
+            var props = {
+                uiOptions: {
+                    showGridlines: false,
+                    showRowColumnHeaders: false,
+                    showParametersTaskPane: false
+                },
+                interactivityOptions: {
+                    allowTypingAndFormulaEntry: false,
+                    allowParameterModification: false,
+                    allowSorting: false,
+                    allowFiltering: false,
+                    allowPivotTableInteractivity: false
+                }
+            };
+            // Embed workbook using loadEwaAsync
+            Ewa.EwaControl.loadEwaAsync(fileToken, "myExcelDiv", props, onEwaLoaded);
+        }
+
+        function onEwaLoaded(asyncResult)
+        { 
+            if (asyncResult.getSucceeded())
+            {
+                // Use the AsyncResult.getEwaControl() method to get a reference to the EwaControl object
+                ewa = asyncResult.getEwaControl();
+                ewa.add_activeCellChanged(cellChanged);
+            }
+            else
+            {
+                console.log("Async operation failed!");
+            }
+            // ...
+        }
+
+        // Handle the active cell changed event.
+        function cellChanged(rangeArgs)
+        {
+            // Use the RangeEventArgs object to get information about the range.
+            var sheetName = rangeArgs.getRange().getSheet().getName();
+            var col = rangeArgs.getRange().getColumn();
+            var row = rangeArgs.getRange().getRow();
+            var value = rangeArgs.getFormattedValues();
+            alert("The active cell is located at row " + (row + 1) + " and column " + (col + 1) + " with value '" + value + "'.");
+            // ...
+        }
+    </script> -->
+
+
+    <!-- <script type="text/javascript">
+        var siteUrl = '/sites/MySiteCollection';
+
+        function retrieveAllListProperties() {
+
+            var clientContext = new SP.ClientContext(siteUrl);
+            var oWebsite = clientContext.get_web();
+            this.collList = oWebsite.get_lists();
+         
+            clientContext.load(collList);
+
+            clientContext.executeQueryAsync(Function.createDelegate(this, this.onQuerySucceeded), Function.createDelegate(this, this.onQueryFailed));
+        }
+
+        function onQuerySucceeded() {
+
+            var listInfo = '';
+
+            var listEnumerator = collList.getEnumerator();
+
+            while (listEnumerator.moveNext()) {
+                var oList = listEnumerator.get_current();
+                listInfo += 'Title: ' + oList.get_title() + ' Created: ' + oList.get_created().toString() + '\n';
+            }
+            alert(listInfo);
+        }
+
+        function onQueryFailed(sender, args) {
+            alert('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+        }
+    </script> -->
+
+
+
+
+</body> 
+</html>
