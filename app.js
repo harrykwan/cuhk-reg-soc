@@ -136,7 +136,7 @@ function callWebApiWithToken(endpoint, token, responseElement, showTokenElement)
                         if (data.mail.indexOf('@link.cuhk.edu.hk')!=-1){
                             $("#loginbox").hide();
                             $("#mainpage").fadeIn();
-                            document.getElementById("showusernamearea").innerHTML = myuserdata.displayName;
+                            document.getElementById("showusernamearea").innerHTML = '<span onclick="changeuser()">'+myuserdata.displayName+ '</span>';
                             checkCookie();
                         } else {
                             alert('Sorry, Please use CU@link email');
