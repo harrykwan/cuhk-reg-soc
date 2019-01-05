@@ -2,9 +2,12 @@
 <html lang="en-US">
 <head>
     <script type="text/javascript" src="https://js.live.net/v7.2/OneDrive.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+    <!-- <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script> -->
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-app.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-firestore.js"></script>
+
     <script>
       // Initialize Firebase
       var config = {
@@ -12,7 +15,7 @@
         authDomain: "cuhk-reg-soc.firebaseapp.com",
         databaseURL: "https://cuhk-reg-soc.firebaseio.com",
         projectId: "cuhk-reg-soc",
-        storageBucket: "",
+        storageBucket: "cuhk-reg-soc.appspot.com",
         messagingSenderId: "351403710743"
       };
       firebase.initializeApp(config);
@@ -172,6 +175,7 @@
             // alert('hi');
             for (var j=1; j<=6; j++)
                 document.getElementById("ok"+j).disabled = true;
+            
             loopcheck = setInterval(function(){
                 var tempframe = document.getElementById("i_frame");
                 senddone = 1;
@@ -191,8 +195,10 @@
                     // tempframe.src = "";
                     if (x==1)
                         showok();
+                    document.getElementById("myloading").hidden = true;
                     for (var j=1; j<=6; j++)
                         document.getElementById("ok"+j).disabled = false;
+
                     tempframe.src = "";
                 }
             },200);
@@ -224,6 +230,7 @@
         <button id="ok10" onclick="launchSaveToOneDrive('fileUploadControl10')">Save to OneDrive</button>
         
     </div>
+    <div hidden id='myloading' style="top: 0; position: fixed; width: 100%; height: 100%; opacity: 0.8; background: black; text-align: center; color: white; padding-top: 48%;">Uploading...</div>
 
         <script type="application/javascript">
             var myip;
@@ -248,9 +255,9 @@
               fileName: "",
               openInNewWindow: true,
               advanced: {
-                //redirectUri: "http://localhost:8000/main.html"
+                redirectUri: "http://localhost:8000/main.html"
                 //redirectUri: "https://harrykwan.github.io/cuhk-reg-soc/main.html"
-                redirectUri: "https://cusuregsoc.ga/main.html"
+                //redirectUri: "https://cusuregsoc.ga/main.html"
               },
               success: function(files) {
                 console.log(files);
@@ -367,6 +374,29 @@
 
     <script type="text/javascript" src="app.js"></script>
     <script type="text/javascript">
+
+        function myupload(x,y){
+            document.getElementById("myloading").hidden = false;
+            var storageRef = firebase.storage().ref();
+            var mountainImagesRef = storageRef.child(y);//'images/mountains.jpg');
+            var file = x;
+            mountainImagesRef.put(file).then(function(snapshot) {
+                console.log('Uploaded a file!');
+                if (document.getElementById("filelistarea").innerHTML==''){
+                    document.getElementById("filelistarea").innerHTML="<div class='mainbodytitle'>Upload History:</div><br><table id='filelisttable' margin-top:20px; style='margin:30px; margin-left: 100px;  width: 70%;''></table>";
+                }
+                var table = document.getElementById("filelisttable");
+                var row = table.insertRow(table.rows.length);
+                var cell1 = row.insertCell(0);
+                cell1.innerHTML = file.name;
+                savefilelist();
+                document.getElementById("googleforminput3").value = file.name+'|'+y;
+                document.getElementById("form").submit();
+                checkdone(1);
+            });
+
+        }
+
         $(document).ready(function(){
             // $("#loginbox").hide().fadeIn("slow");
             // mylogin();
@@ -421,10 +451,12 @@
                          + '<tr><td>行政費收據（第三次申請適用）</td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl10"+"'"+').click()">Upload File</button></tr></table>';
 
                         for (var j=1; j<=10; j++){
-                            document.getElementById("fileUploadControl"+j).onchange =  function(){
+                            document.getElementById("fileUploadControl"+j).onchange =  function(e){
                                 document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
                                 document.getElementById("googleforminput2").value = mysociety+"|step1|form"+this.id[17];
-                                document.getElementById("ok"+this.id[17]).click();                                
+                                var file = e.target.files[0];
+                                myupload(file,mysociety+'/step1form'+this.id[17]+'.'+file.name.split('.')[1]);
+                                //document.getElementById("ok"+this.id[17]).click();                                
                             }
                         }
                         document.getElementById("mainframe").innerHTML +=  "<div class='filelistarea' id='filelistarea'></div>";
@@ -439,10 +471,12 @@
                          + '<tr><td>現屆工作計劃</td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl4"+"'"+').click()">Upload File</button></tr>'
                          + '<tr><td>現屆財政預算</td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl5"+"'"+').click()">Upload File</button></tr></table>';
                         for (var j=1; j<=10; j++){
-                            document.getElementById("fileUploadControl"+j).onchange =  function(){
+                            document.getElementById("fileUploadControl"+j).onchange =  function(e){
                                 document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
                                 document.getElementById("googleforminput2").value = mysociety+"|step2|form"+this.id[17];
-                                document.getElementById("ok"+this.id[17]).click();                                
+                                var file = e.target.files[0];
+                                myupload(file,mysociety+'/step2form'+this.id[17]+'.'+file.name.split('.')[1]);
+                                //document.getElementById("ok"+this.id[17]).click();                                
                             }
                         }
                         document.getElementById("mainframe").innerHTML +=  "<div class='filelistarea' id='filelistarea'></div>";
@@ -459,8 +493,12 @@
                                 var chinnum = ['零','一','二','三','四','五','六','七','八','九','十'];
                                 var d = new Date();
                                 var n = d.getFullYear()+1;
+                                var letterman = doc.data().acceptman;
+                                var letterdate = doc.data().socacceptdate;
+                                var diudate = doc.data().socenddate;
                                 document.getElementById("mainframe").innerHTML = '<div style="text-align: center;""><div style="text-align: center; margin:50px; font-size:20px; " class="m">申請已被接納!<br><br></div></div>';
-                                document.getElementById("mainframe").innerHTML += '<div id="socshit"><div style="background-color: white; color black;  overflow: hidden;"><img style="width: 100%;" src="regsocpaper.png"></div>    <div style="background-color: white; color: black; text-align: center; padding: 20px;">        <h1 style="font-size: 18px;">香港中文大學學生會<br>屬下團體登記證明書</h1>      <br>根據《屬下團體章則》第三十三條發出<br><br><br><br>        <div style="width: 700px; text-align: left; margin: 0 auto;">茲證明「'+mysociety+'」已按照《屬下團體章則》第31條之規定完成週年登記，有 效期至'+chinnum[(n+'')[0]]+chinnum[(n+'')[1]]+chinnum[(n+'')[2]]+chinnum[(n+'')[3]]+'年一月三十一日止。            <br><br>            以下為上述團體在週年登記時提供的幹事資料:        </div>        <br><br><br> <table style="border-collapse: collapse; margin: 0 auto; width: 70%;" id="memberlisttable"><tr style="height: 20px;"><td style="border: 1px solid black;">職位</td><td style="border: 1px solid black;">中文姓名</td><td style="border: 1px solid black; ">英文姓名</td><td style="border: 1px solid black;">學生編號</td></tr></table>          <br><br>  <div style="width: 700px; text-align: left; margin: 0 auto;">如有任何查詢，請以電郵 cuhkrc.acsc@gmail.com 聯絡本委員會。</div><br><br><br><br>  <div style="width: 700px; text-align: left; margin: 0 auto;">香港中文大學學生會代表會</div><br><br><br><br></div></div>';
+                                document.getElementById("mainframe").innerHTML += '<div id="socshit"><div style="background-color: white; color black;  overflow: hidden;"><img style="width: 100%;" src="regsocpaper.png"></div>    <div style="background-color: white; color: black; text-align: center; padding: 20px;">        <h1 style="font-size: 18px;">香港中文大學學生會<br>屬下團體登記證明書</h1>      <br>根據《屬下團體章則》第三十三條發出<br><br><br><br>        <div style="width: 700px; text-align: left; margin: 0 auto;">茲證明「'+mysociety+'」已按照《屬下團體章則》第31條之規定完成週年登記，有效期至'+diudate+'止。            <br><br>            以下為上述團體在週年登記時提供的幹事資料:        </div>        <br><br><br> <table style="border-collapse: collapse; margin: 0 auto; width: 70%;" id="memberlisttable"><tr style="height: 20px;"><td style="border: 1px solid black;">職位</td><td style="border: 1px solid black;">中文姓名</td><td style="border: 1px solid black; ">英文姓名</td><td style="border: 1px solid black;">學生編號</td></tr></table>          <br><br>  <div style="width: 700px; text-align: left; margin: 0 auto;">如有任何查詢，請以電郵 cuhkrc.acsc@gmail.com 聯絡本委員會。</div><br><br><br><br>  <div style="width: 700px; text-align: right; margin: 0 auto;">香港中文大學學生會代表會<br>屬下團體委員會主席<br>（'+letterman+'代行）</div><div style="width: 700px; text-align: left; margin: 0 auto;">'+letterdate+'</div><br><br><br><br></div></div>';
+                                //+chinnum[(n+'')[0]]+chinnum[(n+'')[1]]+chinnum[(n+'')[2]]+chinnum[(n+'')[3]]+'年一月三十一日
                                 var mymemberlist = doc.data().memberlist.split('|');
                                 var table = document.getElementById("memberlisttable");
                                 
@@ -533,7 +571,42 @@
 
         function fillforma(){
             document.getElementById("formaarea").hidden = false;
+            document.getElementById("forma").getElementsByTagName("input")[0].value = mysociety;
+            document.getElementById("forma").getElementsByTagName("input")[1].placeholder = "dd/mm/yyyy-dd/mm/yyyy";
+            document.getElementById("forma").getElementsByTagName("input")[1].value = mygetdate(0,0,0)+"-"+mygetdate(0,0,1);
+        }
 
+        function mygetdate(x,y,z){
+            var today = new Date();
+            var dd = today.getDate() + x;
+            var mm = today.getMonth()+1 + y; //January is 0!
+            var yyyy = today.getFullYear() + z;
+
+            if(dd<10) {
+                dd = '0'+dd
+            } 
+
+            if(mm<10) {
+                mm = '0'+mm
+            } 
+
+            return dd + '/' + mm + '/' + yyyy;
+        }
+
+        function checkdatevalid(x){
+            try{
+                if (x.length!=21)
+                    return false;
+                if (x[2]!='/'||x[5]!='/'||x[10]!='-'||x[13]!='/'||x[16]!='/')
+                    return false;
+            }
+            catch(err){
+                console.log(err);
+                return false;
+            }
+            
+
+            return true;
         }
 
         var mysociety;
@@ -601,24 +674,24 @@
             }
             if (x.value<30&&x.value>0){
                 for (var j=0; j<x.value; j++){
-                var row = table.insertRow(table.rows.length);
-                var cell1 = row.insertCell(0);
-                var cell2 = row.insertCell(1);
-                var cell3 = row.insertCell(2);
-                var cell4 = row.insertCell(3);
-                var cell5 = row.insertCell(4);
-                var cell6 = row.insertCell(5);
-                var cell7 = row.insertCell(6);
-                var cell8 = row.insertCell(7);
-                cell1.innerHTML = "<input class='memberlist' type='text' value=''>";
-                cell2.innerHTML = "<input class='memberlist' type='text' value=''>";
-                cell3.innerHTML = "<input class='memberlist' type='text' value=''>";
-                cell4.innerHTML = "<input class='memberlist' type='text' value=''>";
-                cell5.innerHTML = "<input class='memberlist' type='text' value=''>";
-                cell6.innerHTML = "<input class='memberlist' type='text' value=''>";
-                cell7.innerHTML = "<input class='memberlist' type='text' value=''>";
-                cell8.innerHTML = "<input class='memberlist' type='text' value=''>";
-            }
+                    var row = table.insertRow(table.rows.length);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+                    var cell4 = row.insertCell(3);
+                    var cell5 = row.insertCell(4);
+                    var cell6 = row.insertCell(5);
+                    var cell7 = row.insertCell(6);
+                    var cell8 = row.insertCell(7);
+                    cell1.innerHTML = "<input class='memberlist' type='text' value=''>";
+                    cell2.innerHTML = "<input class='memberlist' type='text' value=''>";
+                    cell3.innerHTML = "<input class='memberlist' type='text' value=''>";
+                    cell4.innerHTML = "<input class='memberlist' type='text' value=''>";
+                    cell5.innerHTML = "<input class='memberlist' type='text' value=''>";
+                    cell6.innerHTML = "<input class='memberlist' type='text' value=''>";
+                    cell7.innerHTML = "<input class='memberlist' type='text' value=''>";
+                    cell8.innerHTML = "<input class='memberlist' type='text' value=''>";
+                }
             }
             
             
@@ -638,61 +711,76 @@
             var memberlist2 = document.getElementById("membertable2").getElementsByTagName("input");
             var forma1 = document.getElementById("forma").getElementsByTagName("input");
             var forma2 = document.getElementById("forma").getElementsByTagName("select");
-            var tempans = '';
 
-            var tempmemberlist='';
+            if (checkdatevalid(forma1[1].value)==false){
+                alert("Invalid Date formate");
+                return;
+            }
+
+            if (confirm("Are you sure?")){
+                
+
+
+                var tempans = '';
+
+                var tempmemberlist='';
+                
+                for (var j=0; j<forma1.length; j++){
+                    tempans += forma1[j].value+'|';                
+                }
+                for (var j=0; j<forma2.length; j++){
+                    tempans += forma2[j].value+'|';                
+                }
+                for (var j=0; j<memberlist.length; j++){
+                    if ((j)%8==0)
+                        tempans += 'student'+(j/8+1)+'|';
+                    tempans += memberlist[j].value+'|';     
+
+                    if (j%8==0)
+                        tempmemberlist += 'student'+(j/8+1)+'|';
+                    if (j%8==0||j%8==1||j%8==2||j%8==3)
+                        tempmemberlist += memberlist[j].value+'|';
+
+                }
+
+                for (var j=0; j<memberlist2.length; j++){
+                    if ((j)%8==0)
+                        tempans += 'student'+(j/8+1)+'|';
+                    tempans += memberlist2[j].value+'|';
+                }
+                // console.log(tempans);
+                // console.log(tempmemberlist);
+                document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
+                document.getElementById("googleforminput2").value = mysociety+"|step1|form1";
+                document.getElementById("googleforminput3").value = tempans;
+                document.getElementById("form").submit();
+                checkdone(1);
+                if (document.getElementById("filelistarea").innerHTML==''){
+                    document.getElementById("filelistarea").innerHTML="<div class='mainbodytitle'>Upload History:</div><br><table id='filelisttable' style='margin:30px; margin-left: 100px;  width: 70%;''></table>";
+                }
+                var table = document.getElementById("filelisttable");
+                var row = table.insertRow(table.rows.length);
+                var cell1 = row.insertCell(0);
+                cell1.innerHTML = "Form A";
+                savefilelist();
+
+                var docRef = db.collection("societymemberlist").doc(mysociety);
+                docRef.set({
+                    memberlist: tempmemberlist,
+                    socenddate: forma1[1].value.split('-')[1],
+                    acceptman: '',
+                    socacceptdate: ''
+                })
+                .then(function(){
+
+                })
+                .catch(function(error){
+
+                });
+
+                document.getElementById("formaarea").hidden = true;
+            }
             
-            for (var j=0; j<forma1.length; j++){
-                tempans += forma1[j].value+'|';                
-            }
-            for (var j=0; j<forma2.length; j++){
-                tempans += forma2[j].value+'|';                
-            }
-            for (var j=0; j<memberlist.length; j++){
-                if ((j)%8==0)
-                    tempans += 'student'+(j/8+1)+'|';
-                tempans += memberlist[j].value+'|';     
-
-                if (j%8==0)
-                    tempmemberlist += 'student'+(j/8+1)+'|';
-                if (j%8==0||j%8==1||j%8==2||j%8==3)
-                    tempmemberlist += memberlist[j].value+'|';
-
-            }
-
-            for (var j=0; j<memberlist2.length; j++){
-                if ((j)%8==0)
-                    tempans += 'student'+(j/8+1)+'|';
-                tempans += memberlist2[j].value+'|';
-            }
-            // console.log(tempans);
-            // console.log(tempmemberlist);
-            document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
-            document.getElementById("googleforminput2").value = mysociety+"|step1|form1";
-            document.getElementById("googleforminput3").value = tempans;
-            document.getElementById("form").submit();
-            checkdone(1);
-            if (document.getElementById("filelistarea").innerHTML==''){
-                document.getElementById("filelistarea").innerHTML="<div class='mainbodytitle'>Upload History:</div><br><table id='filelisttable' style='margin:30px; margin-left: 100px;  width: 70%;''></table>";
-            }
-            var table = document.getElementById("filelisttable");
-            var row = table.insertRow(table.rows.length);
-            var cell1 = row.insertCell(0);
-            cell1.innerHTML = "Form A";
-            savefilelist();
-
-            var docRef = db.collection("societymemberlist").doc(mysociety);
-            docRef.set({
-                memberlist: tempmemberlist
-            })
-            .then(function(){
-
-            })
-            .catch(function(error){
-
-            });
-
-            document.getElementById("formaarea").hidden = true;
             
         }
 
