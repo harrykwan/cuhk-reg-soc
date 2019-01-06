@@ -1,0 +1,547 @@
+<!-- <html>
+<head>
+</head>
+<body>
+	<script src="https://apis.google.com/js/api.js"></script>
+	<script>
+	function start() {
+	  // 2. Initialize the JavaScript client library.
+	  gapi.client.init({
+	    'apiKey': 'AIzaSyCgqyzrRe2dLa676z725MRVHYhkdQ86A30',
+	    // Your API key will be automatically added to the Discovery Document URLs.
+	    'discoveryDocs': ['https://people.googleapis.com/$discovery/rest'],
+	    // clientId and scope are optional if auth is not required.
+	    'clientId': '531417626263-6breo4rq95npc1c9t9ip9cjud10oggdp.apps.googleusercontent.com',
+	    'scope': 'https://www.googleapis.com/auth/spreadsheets',
+	  }).then(function() {
+	    // 3. Initialize and make the API request.
+	    return gapi.client.people.people.get({
+	      'resourceName': 'people/me',
+	      'requestMask.includeField': 'person.names'
+	    });
+	  }).then(function(response) {
+	    console.log(response.result);
+	  }, function(reason) {
+	    console.log('Error: ' + reason.result.error.message);
+	  });
+	};
+	// 1. Load the JavaScript client library.
+	gapi.load('client', start);
+	</script>
+</body>
+</html> -->
+<html>
+  <head>
+
+    <meta charset="utf-8">
+    <style type="text/css">
+      table{
+        margin-top: 10px;
+      }
+      td{
+        border: 1px solid black;
+        padding: 2px;
+      }
+      tr{
+
+      }
+
+      button{
+        padding: 5px;
+        margin-right: 10px;
+        border-radius: 0;
+        border: 1px solid black;
+      }
+
+      .forma{
+          border: 1px solid white;
+          border-radius: 3px;
+          background: black;
+          color: white;
+          /*padding: 1px;*/
+          width: 150px;
+          font-size: 15px;
+          font-family: ‘cwTeXYen’,'Noto Sans Tc',/*'FontAwesome', sans-serif;*/'Roboto', sans-serif;
+          color: white;
+      }
+
+      .mytd{
+        border: 1px solid grey;
+      }
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript" src="https://js.live.net/v7.2/OneDrive.js"></script>
+    <!-- <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script> -->
+    <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-app.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase-firestore.js"></script>
+
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyBI7Ji3XUH1AaASHAST2j6aj7YUuzKB-R0",
+        authDomain: "cuhk-reg-soc.firebaseapp.com",
+        databaseURL: "https://cuhk-reg-soc.firebaseio.com",
+        projectId: "cuhk-reg-soc",
+        storageBucket: "cuhk-reg-soc.appspot.com",
+        messagingSenderId: "351403710743"
+      };
+      firebase.initializeApp(config);
+      var db = firebase.firestore();
+
+        // Disable deprecated features
+        db.settings({
+          timestampsInSnapshots: true
+        });
+    </script>
+
+    <div id="googleformarea" hidden>
+        <iframe id="i_frame" name="googleform"></iframe>
+
+        <form id="form" action="https://docs.google.com/forms/d/e/1FAIpQLSdCOpwSr3UsqSJ9ky4j7NKTFTzCmLxXzzAiQNHaKSv6YgY7Cw/formResponse" target="googleform" method="POST" onsubmit="checkdone(0)">
+            <input id="googleforminput1" type="text" name="entry.2045469385" value="">
+            <input id="googleforminput2" type="text" name="entry.1431600269" value="">
+            <input id="googleforminput3" type="text" name="entry.1528364708" value="">
+        </form>
+        
+    </div>
+
+    <div hidden id="formaarea" style="position: fixed; left: 0; right: 0; margin-left: auto; margin-right: auto; width: 80%; top: 100px; height: 70%; background: black; color: white; opacity: 0.8; padding:20px; overflow: hidden; border: 2px solid white;border-radius: 5px; font-size: 16px;">
+        <div style="overflow: scroll; height: 110%; width: 110%;">
+            <div style="margin-top: 50px; background-color: black; color: white; border: none;">表格A</div>
+            <table id="forma" style=" width: 80%;margin-left: 10%; margin-top: 3%; color: white;">
+            <tr><td>屬下團體名稱: </td><td><input disabled class="forma" type="text" name=""></td></tr>
+            <tr><td>團體性質:</td><td><select disabled class="forma">
+              <option value="國際生學生會">國際生學生會</option>
+              <option value="院/系會">院/系會</option>
+              <option value="學會/認可會社">學會/認可會社</option>
+            </select></td></tr>
+            <tr><td>幹事會(或同等行政機構)任期</td><td><input disabled class="forma" type="text" name=""></td></tr>
+            <tr><td>是否為臨時行政機構</td><td><select disabled class="forma">
+              <option value="是臨時行政機構">是</option>
+              <option value="不是臨時行政機構">否</option>
+            </select></td></tr>
+            <tr><td>是否設有代表會(或同等監察機構)</td><td><select disabled class="forma">
+              <option value="是設有代表會">是</option>
+              <option value="不是設有代表會">否</option>
+            </select></td></tr>
+            <tr><td>代表會(或同等監察機構)任期 </td><td><input disabled class="forma" type="text" name=""></td></tr>
+            <tr><td>聯絡人姓名:</td><td><input disabled class="forma" type="text" name=""></td></tr>
+            <tr><td>聯絡電話:</td><td><input disabled class="forma" type="text" name=""></td></tr>
+            <tr><td>聯絡電郵:</td><td><input disabled class="forma" type="text" name=""></td></tr>
+            </table>
+            <hr>
+           幹事會成員
+            <table id="membertable" style=" width: 80%;margin-left: 10%; margin-top: 3%; border: none; color: white;">
+                <tr style="border-bottom: 1px solid grey;"><td>職位</td><td>中文名稱</td><td>英文名稱</td><td>學生證編號</td><td>書院</td><td>學系</td><td>學年</td><td>電話</td></tr>
+            </table>
+            <hr>
+           代表會成員
+            <table id="membertable2" style=" width: 80%;margin-left: 10%; margin-top: 3%; border: none; color: white;">
+                <tr style="border-bottom: 1px solid grey;"><td>職位</td><td>中文名稱</td><td>英文名稱</td><td>學生證編號</td><td>書院</td><td>學系</td><td>學年</td><td>電話</td></tr>
+            </table>
+             
+            
+            <div onclick="closeforma()" style="position: fixed; color: white; background: black; top:110px; right:10%;">X</div>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+        </div>
+
+    </div>
+    <!--
+    BEFORE RUNNING:
+    ---------------
+    1. If not already done, enable the Google Sheets API
+       and check the quota for your project at
+       https://console.developers.google.com/apis/api/sheets
+    2. Get access keys for your application. See
+       https://developers.google.com/api-client-library/javascript/start/start-js#get-access-keys-for-your-application
+    3. For additional information on authentication, see
+       https://developers.google.com/sheets/api/quickstart/js#step_2_set_up_the_sample
+    -->
+    <script type="text/javascript">
+        var loopcheck, loopcheck2;
+        var senddone = 1, firstin = 0;
+        function checkdone(x) {
+            // alert('hi');
+            
+            loopcheck = setInterval(function(){
+                var tempframe = document.getElementById("i_frame");
+                senddone = 1;
+                firstin = 1;
+                // console.log(senddone);
+                // console.log(tempframe.contentDocument);
+                // console.log(tempframe.contentWindow.location.href);
+                if (tempframe.contentDocument){
+                    senddone = 0;
+                }
+            },200);
+            loopcheck2 = setInterval(function(){
+                if (firstin&&senddone){
+                    clearInterval(loopcheck);
+                    clearInterval(loopcheck2);
+                    var tempframe = document.getElementById("i_frame");
+                    // tempframe.src = "";
+                    if (x==1)
+                      alert('ok');
+
+                        //showok();
+
+                    tempframe.src = "";
+                    location.reload();
+                }
+            },200);
+        }
+    </script>
+
+    <script>
+
+    var myresult;
+
+    var mydata={};
+
+    function makeApiCall() {
+      var params = {
+        // The ID of the spreadsheet to retrieve data from.
+        spreadsheetId: '1lFp_6UHi4KgSx2vtMw9i39ax-KXojMKqhNTEEywNc7E',//'1DyjIJd6b5hXbNOGTmdTZTMwVc0GPqrlVkx-YKsoc41g',  // TODO: Update placeholder value.
+
+        // The A1 notation of the values to retrieve.
+        range: 'A1:Z10000',//'A1:Z1000',  // TODO: Update placeholder value.
+
+        // How values should be represented in the output.
+        // The default render option is ValueRenderOption.FORMATTED_VALUE.
+        valueRenderOption: 'FORMATTED_VALUE',  // TODO: Update placeholder value.
+
+        // How dates, times, and durations should be represented in the output.
+        // This is ignored if value_render_option is
+        // FORMATTED_VALUE.
+        // The default dateTime render option is [DateTimeRenderOption.SERIAL_NUMBER].
+        dateTimeRenderOption: 'SERIAL_NUMBER',  // TODO: Update placeholder value.
+      };
+
+      var request = gapi.client.sheets.spreadsheets.values.get(params);
+      request.then(function(response) {
+        // TODO: Change code below to process the `response` object:
+        console.log(response.result);
+        myresult = response.result;
+        document.getElementById("myshowsheet").innerHTML = '';
+        for (var j=1; j<myresult.values.length; j++){
+        	// document.getElementById("myshowsheet").innerHTML += myresult.values[j]+'<br>';
+          // console.log(myresult.values[j]);
+          if (myresult.values[j][1].split('|').length==2){
+            if (!mydata[myresult.values[j][1].split('|')[0]]){
+              mydata[myresult.values[j][1].split('|')[0]] = {};
+            }
+            mydata[myresult.values[j][1].split('|')[0]].step = myresult.values[j][1].split('|')[1];
+            mydata[myresult.values[j][1].split('|')[0]].updatetime =  myresult.values[j][0];
+            // document.getElementById("myshowsheet").innerHTML += myresult.values[j][1].split('|')[0]+' '+myresult.values[j][1].split('|')[1]+'<br>';
+
+            // for (var k=0; k<myresult.values[j][2].split('|').length; k++){
+            //   if (myresult.values[j][2].split('|')[k]!=''&&myresult.values[j][2].split('|')[k]!='undefined')
+            //    document.getElementById("myshowsheet").innerHTML += '- '+myresult.values[j][2].split('|')[k]+'<br>';
+            // }
+            // document.getElementById("myshowsheet").innerHTML += myresult.values[j][2].split('|')+'<br>';
+            // document.getElementById("myshowsheet").innerHTML += '<br>';
+          } else if (myresult.values[j][1].split('|').length==3){
+            if (!mydata[myresult.values[j][1].split('|')[0]]){
+              mydata[myresult.values[j][1].split('|')[0]] = {};
+            }
+             mydata[myresult.values[j][1].split('|')[0]][myresult.values[j][1].split('|')[1]+myresult.values[j][1].split('|')[2]] = myresult.values[j][2];
+              mydata[myresult.values[j][1].split('|')[0]].updatetime =  myresult.values[j][0];         
+          } else {
+            mydata[myresult.values[j][1]].step = undefined;
+          }
+          // console.log(mydata);
+
+        }
+
+
+
+        console.log(mydata);
+        var orderlist = [];
+        for (var item in mydata){
+          orderlist[orderlist.length] = item;
+        }
+
+        // console.log(orderlist)
+
+        for (var j=0; j<orderlist.length-1; j++){
+          for (var k=j+1; k<orderlist.length; k++){
+            if (comparetime(mydata[orderlist[j]].updatetime,mydata[orderlist[k]].updatetime)){
+              var temp = orderlist[j];
+              orderlist[j] = orderlist[k];
+              orderlist[k] = temp;
+            }
+          }
+        }
+
+        // console.log(orderlist);
+        
+        // for (var item in mydata){
+        for (var jj=0; jj<orderlist.length; jj++){
+          var item = orderlist[jj];
+          var mystep = mydata[item].step;
+          if (mystep==undefined)
+            mystep = '/';
+          else{
+             mystep = mystep[4];
+            document.getElementById("myshowsheet").innerHTML +=  item + '<table id="'+item+'" style="width: 80%;">'+'<tr><td style="width: 30%;">submit step</td><td>'+ mystep +'</td</tr>'+'<tr><td>last update</td><td>'+mydata[item].updatetime+'</td</tr>'+'</table><br>';
+            document.getElementById("myshowsheet").innerHTML += "<button onclick='myapprove("+'"'+item+'",'+mystep+")'>Approve</button>"+"<button onclick='mydisapprove("+'"'+item+'",'+mystep+")'>Fail</button>"+'<br><br><hr><br><br>';
+
+            var table = document.getElementById(item);
+            var myformlist=[];
+            if (mystep==1){
+              myformlist[1] = '表格A 基本資料';
+              myformlist[2] = '表格B 選舉報告';
+              myformlist[3] = '表格D 補充資料、錄音連結';
+              myformlist[4] = '表格E 聲明';
+              myformlist[5] = '會員名單（屬會適用)';
+              myformlist[6] = '學系人數證明（院系會適用'; 
+              myformlist[7] = '銀行賬戶確認聲明';
+              myformlist[8] = '團體的銀行賬戶/現金結餘證明';
+              myformlist[9] = '選票樣式';
+              myformlist[10] = '行政費收據';
+            }
+            for (var j=1; j<10; j++){
+              if (mydata[item]['step'+mystep+'form'+j]){
+                var row = table.insertRow(table.rows.length);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var mylink = mydata[item]['step'+mystep+'form'+j].split('|')[1];
+                var myfilename = mydata[item]['step'+mystep+'form'+j].split('|')[0];
+                cell1.innerHTML = myformlist[j];//'step'+mystep+'form'+j;
+                if (mystep==1&&j==1){
+                  cell2.innerHTML = '<a href="#forma" onclick="fillforma('+"'"+item+"'"+')">Open</a>'
+                } else {
+                  cell2.innerHTML = '<a href="#'+myfilename+'" onclick="mydownload('+"'"+mylink+"'"+')">'+myfilename+'</a>';
+                }
+                
+              }
+            }
+
+          }
+        }
+        
+      }, function(reason) {
+        console.error('error: ' + reason.result.error.message);
+      });
+    }
+
+    function initClient() {
+      var API_KEY = 'AIzaSyCgqyzrRe2dLa676z725MRVHYhkdQ86A30';  // TODO: Update placeholder with desired API key.
+
+      var CLIENT_ID = '531417626263-6breo4rq95npc1c9t9ip9cjud10oggdp.apps.googleusercontent.com';  // TODO: Update placeholder with desired client ID.
+
+      // TODO: Authorize using one of the following scopes:
+      //   'https://www.googleapis.com/auth/drive'
+      //   'https://www.googleapis.com/auth/drive.file'
+      //   'https://www.googleapis.com/auth/spreadsheets'
+      var SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
+
+      gapi.client.init({
+        'apiKey': API_KEY,
+        'clientId': CLIENT_ID,
+        'scope': SCOPE,
+        'discoveryDocs': ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+      }).then(function() {
+        gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus);
+        updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+      });
+    }
+
+    function handleClientLoad() {
+      gapi.load('client:auth2', initClient);
+    }
+
+    function updateSignInStatus(isSignedIn) {
+      if (isSignedIn) {
+        makeApiCall();
+      }
+    }
+
+    function handleSignInClick(event) {
+      gapi.auth2.getAuthInstance().signIn();
+    }
+
+    function handleSignOutClick(event) {
+      gapi.auth2.getAuthInstance().signOut();
+    }
+
+    function closeforma(){
+        document.getElementById("formaarea").hidden = true;
+    }
+
+    function mydownload(x){
+      console.log(x);
+      var storageRef = firebase.storage().ref();
+      var starsRef = storageRef.child(x);
+
+      // Get the download URL
+      starsRef.getDownloadURL().then(function(url) {
+        // Insert url into an <img> tag to "download"
+        console.log(url);
+        window.open(url);
+      }).catch(function(error) {
+
+        // A full list of error codes is available at
+        // https://firebase.google.com/docs/storage/web/handle-errors
+        switch (error.code) {
+          case 'storage/object-not-found':
+            // File doesn't exist
+            break;
+
+          case 'storage/unauthorized':
+            // User doesn't have permission to access the object
+            break;
+
+          case 'storage/canceled':
+            // User canceled the upload
+            break;
+
+          
+
+          case 'storage/unknown':
+            // Unknown error occurred, inspect the server response
+            break;
+        }
+      });
+    }
+
+    function comparetime(x,y) {
+      return Date.parse(x) > Date.parse(y);
+    }
+
+    function changestatus(x,y){
+        var docRef = db.collection("societystatus").doc(x);
+        docRef.set({
+            filelist: '',
+            status: y
+        })
+        .then(function(){
+            
+        })
+        .catch(function(error){
+            console.log(error);
+        });
+    }
+
+    function myapprove(x,y) {
+      changestatus(x,y+1);
+      document.getElementById("googleforminput2").value = x;
+      document.getElementById("googleforminput3").value = "approve";
+      document.getElementById("googleforminput1").value = '';
+      document.getElementById("form").submit();
+      checkdone(1);
+    }
+
+    function mydisapprove(x,y) {
+      changestatus(x,y-1);
+      document.getElementById("googleforminput2").value = x;
+      document.getElementById("googleforminput3").value = "disapprove";
+      document.getElementById("googleforminput1").value = '';
+      document.getElementById("form").submit();
+      checkdone(1);
+    }
+
+    function fillforma(x) {
+      var formadata = mydata[x].step1form1.split('|');
+      document.getElementById("formaarea").hidden = false;
+      for (var j=0; j<=5; j++){
+        document.getElementById("forma").getElementsByTagName("input")[j].value = formadata[j];
+      }
+      
+      for (var j=6; j<=8; j++){
+        document.getElementById("forma").getElementsByTagName("select")[j-6].value = formadata[j];
+      }
+
+      var table = document.getElementById("membertable");
+
+      while (table.rows.length>1){
+          table.deleteRow(table.rows.length-1);
+      }
+
+      var nowid = -1;
+      for (var j=9; j<formadata.length; j+=9){
+          if (nowid==-1||formadata[nowid][7]<formadata[j][7]){
+            var row = table.insertRow(table.rows.length);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+            var cell6 = row.insertCell(5);
+            var cell7 = row.insertCell(6);
+            var cell8 = row.insertCell(7);
+            cell1.innerHTML = formadata[j+1];
+            cell2.innerHTML = formadata[j+2];
+            cell3.innerHTML = formadata[j+3];
+            cell4.innerHTML = formadata[j+4];
+            cell5.innerHTML = formadata[j+5];
+            cell6.innerHTML = formadata[j+6];
+            cell7.innerHTML = formadata[j+7];
+            cell8.innerHTML = formadata[j+8];
+            nowid = j;
+            cell1.classList.add('mytd');
+            cell2.classList.add('mytd');
+            cell3.classList.add('mytd');
+            cell4.classList.add('mytd');
+            cell5.classList.add('mytd');
+            cell6.classList.add('mytd');
+            cell7.classList.add('mytd');
+            cell8.classList.add('mytd');
+          } else {
+            break;
+          }
+      }
+
+      var table = document.getElementById("membertable2");
+
+      while (table.rows.length>1){
+          table.deleteRow(table.rows.length-1);
+      }
+
+      for (var j=nowid+9; j<formadata.length-1; j+=9){
+          
+            var row = table.insertRow(table.rows.length);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+            var cell6 = row.insertCell(5);
+            var cell7 = row.insertCell(6);
+            var cell8 = row.insertCell(7);
+            cell1.innerHTML = formadata[j+1];
+            cell2.innerHTML = formadata[j+2];
+            cell3.innerHTML = formadata[j+3];
+            cell4.innerHTML = formadata[j+4];
+            cell5.innerHTML = formadata[j+5];
+            cell6.innerHTML = formadata[j+6];
+            cell7.innerHTML = formadata[j+7];
+            cell8.innerHTML = formadata[j+8];
+            cell1.classList.add('mytd');
+            cell2.classList.add('mytd');
+            cell3.classList.add('mytd');
+            cell4.classList.add('mytd');
+            cell5.classList.add('mytd');
+            cell6.classList.add('mytd');
+            cell7.classList.add('mytd');
+            cell8.classList.add('mytd');
+      }
+
+    }
+
+    handleSignInClick();
+    </script>
+    <script async defer src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+    <div id="myshowsheet"></div>
+    <!-- <button id="signin-button" onclick="handleSignInClick()">Sign in</button> -->
+    <!-- <button id="signout-button" onclick="handleSignOutClick()">Sign out</button> -->
+  </body>
+</html>
