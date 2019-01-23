@@ -461,10 +461,11 @@
                          + '<tr><td>去屆工作報告（首屆除外）</td><td><a class="downloadlink" target="_blank" href="">template</a></td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl8"+"'"+').click()">Upload File</button></tr>'
                          + '<tr><td>去屆財政報告（首屆除外）</td><td><a class="downloadlink" target="_blank" href="">template</a></td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl9"+"'"+').click()">Upload File</button></tr>'
                          + '<tr><td>現屆工作計劃</td><td><a class="downloadlink" target="_blank" href="">template</a></td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl10"+"'"+').click()">Upload File</button></tr>'
-                         + '<tr><td>現屆財政預算</td><td><a class="downloadlink" target="_blank" href="">template</a></td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl11"+"'"+').click()">Upload File</button></tr></table>';
+                         + '<tr><td>現屆財政預算</td><td><a class="downloadlink" target="_blank" href="">template</a></td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl11"+"'"+').click()">Upload File</button></tr>'
+                         + '<tr><td>其他文件</td><td></td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl12"+"'"+').click()">Upload File</button></tr></table>';
                          // + '<tr><td>行政費收據（第三次申請適用）</td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl10"+"'"+').click()">Upload File</button></tr></table>';
 
-                        for (var j=1; j<=11; j++){
+                        for (var j=1; j<=12; j++){
                             document.getElementById("fileUploadControl"+j).onchange =  function(e){
                                 document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
                                 document.getElementById("googleforminput2").value = mysociety+"|step1|form"+this.id[17];
@@ -496,8 +497,9 @@
                          + '<tr><td>去屆工作報告（首屆除外）</td><td><a class="downloadlink" target="_blank" href="">template</a></td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl2"+"'"+').click()">Upload File</button></tr>'
                          + '<tr><td>去屆財政報告（首屆除外）</td><td><a class="downloadlink" target="_blank" href="">template</a></td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl3"+"'"+').click()">Upload File</button></tr>'
                          + '<tr><td>現屆工作計劃</td><td><a class="downloadlink" target="_blank" href="">template</a></td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl4"+"'"+').click()">Upload File</button></tr>'
-                         + '<tr><td>現屆財政預算</td><td><a class="downloadlink" target="_blank" href="">template</a></td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl5"+"'"+').click()">Upload File</button></tr></table>';
-                        for (var j=1; j<=11; j++){
+                         + '<tr><td>現屆財政預算</td><td><a class="downloadlink" target="_blank" href="">template</a></td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl5"+"'"+').click()">Upload File</button></tr>'
+                         + '<tr><td>其他文件</td><td></td><td><button class="ok" onclick="document.getElementById('+"'"+"fileUploadControl6"+"'"+').click()">Upload File</button></tr></table>';
+                        for (var j=1; j<=12; j++){
                             document.getElementById("fileUploadControl"+j).onchange =  function(e){
                                 document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
                                 document.getElementById("googleforminput2").value = mysociety+"|step2|form"+this.id[17];
