@@ -491,7 +491,7 @@
 
                         document.getElementById("mainframe").innerHTML +=  "<div class='filelistarea' id='filelistarea'></div>";
 
-                        document.getElementById("mainframe").innerHTML += "<button onclick='submitall()' class='mainbodytitle submitbutton'>提交申請</button>";
+                        document.getElementById("mainframe").innerHTML += "<button onclick='submitall(1)' class='mainbodytitle submitbutton'>提交申請</button>";
                     
 
                     } else if (nowstatus==2){
@@ -512,22 +512,22 @@
                         }
                         document.getElementById("mainframe").innerHTML +=  "<div class='filelistarea' id='filelistarea'></div>";
 
-                        document.getElementById("mainframe").innerHTML += "<button onclick='submitall()' class='mainbodytitle submitbutton'>提交申請</button>";
+                        document.getElementById("mainframe").innerHTML += "<button onclick='submitall(2)' class='mainbodytitle submitbutton'>提交申請</button>";
                     } else if (nowstatus==1||nowstatus==3){
                         document.getElementById("mainframe").innerHTML = '<div style="text-align: center;""><div style="text-align: center; margin:50px; font-size:20px; " class="m">完成遞交!<br><br>屬下團體委員會將會審核你的申請。</div></div>';
                     } else if (nowstatus==4){
                         var docRef = db.collection("societymemberlist").doc(mysociety);
-
-                        docRef.get().then(function(doc) {
-                            if (doc.exists) {
-                                // console.log("Document data:", doc.data());
-                                var chinnum = ['零','一','二','三','四','五','六','七','八','九','十'];
-                                var d = new Date();
-                                var n = d.getFullYear()+1;
-                                var letterman = doc.data().acceptman;
-                                var letterdate = doc.data().socacceptdate;
-                                var diudate = doc.data().socenddate;
-                                document.getElementById("mainframe").innerHTML = '<div style="text-align: center;""><div style="text-align: center; margin:50px; font-size:20px; " class="m">申請已被接納!<br><br></div></div>';
+                        document.getElementById("mainframe").innerHTML = '<div style="text-align: center;""><div style="text-align: center; margin:50px; font-size:20px; " class="m">申請已被接納!<br><br></div></div>';
+                        // docRef.get().then(function(doc) {
+                        //     if (doc.exists) {
+                        //         // console.log("Document data:", doc.data());
+                        //         var chinnum = ['零','一','二','三','四','五','六','七','八','九','十'];
+                        //         var d = new Date();
+                        //         var n = d.getFullYear()+1;
+                        //         var letterman = doc.data().acceptman;
+                        //         var letterdate = doc.data().socacceptdate;
+                        //         var diudate = doc.data().socenddate;
+                        //         document.getElementById("mainframe").innerHTML = '<div style="text-align: center;""><div style="text-align: center; margin:50px; font-size:20px; " class="m">申請已被接納!<br><br></div></div>';
                                 /*
                                 document.getElementById("mainframe").innerHTML += '<div id="socshit"><div style="background-color: white; color black;  overflow: hidden;"><img style="width: 100%;" src="regsocpaper.png"></div>    <div style="background-color: white; color: black; text-align: center; padding: 20px;">        <h1 style="font-size: 18px;">香港中文大學學生會<br>屬下團體登記證明書</h1>      <br>根據《屬下團體章則》第三十三條發出<br><br><br><br>        <div style="width: 700px; text-align: left; margin: 0 auto;">茲證明「'+mysociety+'」已按照《屬下團體章則》第31條之規定完成週年登記，有效期至'+diudate+'止。            <br><br>            以下為上述團體在週年登記時提供的幹事資料:        </div>        <br><br><br> <table style="border-collapse: collapse; margin: 0 auto; width: 70%;" id="memberlisttable"><tr style="height: 20px;"><td style="border: 1px solid black;">職位</td><td style="border: 1px solid black;">中文姓名</td><td style="border: 1px solid black; ">英文姓名</td><td style="border: 1px solid black;">學生編號</td></tr></table>          <br><br>  <div style="width: 700px; text-align: left; margin: 0 auto;">如有任何查詢，請以電郵 cuhkrc.acsc@gmail.com 聯絡本委員會。</div><br><br><br><br>  <div style="width: 700px; text-align: right; margin: 0 auto;">香港中文大學學生會代表會<br>屬下團體委員會主席<br>（'+letterman+'代行）</div><div style="width: 700px; text-align: left; margin: 0 auto;">'+letterdate+'</div><br><br><br><br></div></div>';
                                 //+chinnum[(n+'')[0]]+chinnum[(n+'')[1]]+chinnum[(n+'')[2]]+chinnum[(n+'')[3]]+'年一月三十一日
@@ -560,13 +560,13 @@
                                 }
                                 PrintElem(document.getElementById("socshit"));
                                 */
-                            } else {
-                                // doc.data() will be undefined in this case
-                                console.log("No such document!");
-                            }
-                        }).catch(function(error) {
-                            console.log("Error getting document:", error);
-                        });
+                        //     } else {
+                        //         // doc.data() will be undefined in this case
+                        //         console.log("No such document!");
+                        //     }
+                        // }).catch(function(error) {
+                        //     console.log("Error getting document:", error);
+                        // });
 
                         
                         // var mywindow = window.open("regsocpaper.html", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=1000,left=1000,width=1000,height=1000");
@@ -838,10 +838,10 @@
 
         }
 
-        function submitall(){
+        function submitall(x){
             if (confirm("Are you sure?")&&(nowstatus==0||nowstatus==2)){
                 document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
-                document.getElementById("googleforminput2").value = mysociety+"|step1";
+                document.getElementById("googleforminput2").value = mysociety+"|step"+x;
                 document.getElementById("googleforminput3").value = nowfilelist;
                 document.getElementById("form").submit();
                 nowstatus++;
