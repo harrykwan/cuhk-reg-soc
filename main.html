@@ -647,6 +647,8 @@
         }
 
         var mysociety;
+        var societylistid ={};
+
         function checkCookie(x) {
             if (x!=1)
                 mysociety=getCookie("society");
@@ -658,6 +660,8 @@
             } else {
                 var tempoutput = '<div class="mainbodytitle">選擇所屬團體</div><br><br><br><div class="choosesocietybox"><input placeholder="Search Here" id="societyinput" class="societyinput" onkeydown="helpchoose(this)" type="text" style="border-bottom: 2px solid #AAAAAA;"><div class="societybox" style="margin-top: 0;">';
                 for (var j=0; j<societylist.length; j++){
+                    societylistid[societylist[j].name] = societylist[j].id;
+                    // console.log(societylistid);
                     tempoutput += '<div class="societylist" onclick="choosesociety(this)">'+societylist[j].name+'</div>';
                 }
                 tempoutput+='<div style="height: 20px;"></div></div></div>'
@@ -693,7 +697,8 @@
                 // console.log(x.value);
                 var tempsocietylist = document.getElementsByClassName("societylist");
                 for (var j=0; j<tempsocietylist.length; j++){
-                    if (tempsocietylist[j].innerHTML.indexOf(x.value)!=-1||societylist[j].id.indexOf(x.value)!=-1){
+                    console.log(societylistid[tempsocietylist[j].innerHTML]);
+                    if (tempsocietylist[j].innerHTML.indexOf(x.value)!=-1||societylistid[tempsocietylist[j].innerHTML].indexOf(x.value.toUpperCase())!=-1){
                         // console.log(tempsocietylist[j].innerHTML);
                         tempsocietylist[j].hidden = false;
                     } else {
