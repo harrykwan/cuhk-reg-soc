@@ -312,6 +312,10 @@
 
     </div> <!-- end loginbox -->
 
+    <div id="">
+        
+    </div>
+
     <div id="mainpage" hidden>
         <div id="mainhead">
             <h1 class="h1mainhead">中大屬會登記</h1>
@@ -652,11 +656,11 @@
                 document.getElementById("mainframe").innerHTML = '';
                 checkstatus(mysociety);
             } else {
-                var tempoutput = '<div class="mainbodytitle">選擇所屬團體</div><br><div class="choosesocietybox"><div class="societybox">';
+                var tempoutput = '<div class="mainbodytitle">選擇所屬團體</div><br><br><br><div class="choosesocietybox"><input placeholder="Search Here" id="societyinput" class="societyinput" onkeydown="helpchoose(this)" type="text" style="border-bottom: 2px solid #AAAAAA;"><div class="societybox" style="margin-top: 0;">';
                 for (var j=0; j<societylist.length; j++){
                     tempoutput += '<div class="societylist" onclick="choosesociety(this)">'+societylist[j].name+'</div>';
                 }
-                tempoutput+='<div style="height: 20px;"></div></div><input placeholder="Search Here" id="societyinput" class="societyinput" onkeydown="helpchoose(this)" type="text"></div>'
+                tempoutput+='<div style="height: 20px;"></div></div></div>'
                 document.getElementById("mainframe").innerHTML = tempoutput;
             }
         }
