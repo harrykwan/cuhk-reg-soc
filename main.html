@@ -88,6 +88,7 @@
         .submitbutton{
             margin-left: 80%;
             font-size: 20px;
+            outline: none;
         }
 
         .submitbutton:hover{
@@ -131,6 +132,39 @@
         .downloadlink{
             color: #DDDDDD;
         }
+
+        .loginstartpage{
+            border-left: 2px solid #AAAAAA;
+            border-right: 2px solid #AAAAAA;
+            border-radius: 10px;
+            color: #dedede;
+            width: 89%;
+            height: 10%;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 20px;
+            padding: 20px;
+            padding-bottom: 40px;
+            overflow: hidden;
+            /*box-shadow: 2px 2px 2px;*/
+            background-color: #111111;
+            background-color: #151515;
+            margin-bottom: 50px;
+        }
+
+        .regulationlist{
+            padding-left: 80px;
+            padding-top: 20px;
+        }
+
+        .regulationlist>li{
+            padding: 10px;
+            font-size: 16px
+        }
+
     </style>
 </head>
 
@@ -303,7 +337,7 @@
         </div> <!-- end login -->
 
         <div id="loginfoot">
-            <div class="botinfo">登記狀態 ｜ 常用資料 ｜ 聯繫屬委</div>
+            <!-- <div class="botinfo">登記狀態 ｜ 常用資料 ｜ 聯繫屬委</div> -->
             <hr class="myhr1">
             <div class="botinfo">香港中文大學學生會代表會<br>屬下團體委員會</div>
         </div> <!-- end of loginfoot -->
@@ -322,6 +356,32 @@
             <hr>
             <div id="showusernamearea"></div>
         </div> <!-- end of main head -->
+        <div id="loginstartpage" class="loginstartpage">
+            <div class="mainbodytitle">請閱讀以下條款</div>
+            <ul class="regulationlist">
+           <!--  <li>
+            <a href="http://council.cusu.hk/cons/ACS_Ordinance.pdf">屬下團體章則</a>
+            </li> -->
+            <li>
+            <a class="downloadlink" target="_blank" href="http://council.cusu.hk/wp/wp-content/uploads/2018/07/%E5%B1%AC%E4%B8%8B%E5%9C%98%E9%AB%94%E6%A2%9D%E4%BE%8B-30-06-2018.pdf">屬下團體條例</a></li>
+            <li>
+            <a class="downloadlink" target="_blank" href="http://council.cusu.hk/cons/ACS_Investigation_Procedures_Bylaw.pdf">屬下團體調查附則</a>
+            </li>
+            <li>
+            <a class="downloadlink" target="_blank" href="http://council.cusu.hk/cons/ACS_Rooms_Allocation_Bylaw.pdf">屬下團體會室分配附則</a>
+            </li>
+            <li>
+            <a class="downloadlink" target="_blank" href="http://council.cusu.hk/cons/ACS_Activities_Fund_Bylaw.pdf">屬下團體活動基金附則</a>
+            </li>
+            <li>
+            <a class="downloadlink" target="_blank" href="http://council.cusu.hk/cons/Bylaw_of_Annual_Conference_of_ACS.pdf">屬下團體週年聯席會議附則</a>
+            </li>
+            <li>
+            <a class="downloadlink" target="_blank" href="http://council.cusu.hk/wp/wp-content/uploads/2015/07/%E5%B1%AC%E4%B8%8B%E5%9C%98%E9%AB%94%EF%BC%88%E6%AD%A3%E5%90%8D%EF%BC%89%E9%99%84%E5%89%87-2016-11-17.pdf">屬下團體（正名）附則</a>
+            </li>
+            </ul>
+            <button onclick="acceptregulation()" class="mainbodytitle submitbutton" style="width: 200px; margin-left: 70%;">同意並繼續</button>
+        </div>
         <div id="mainframe">
             <!-- <table style="width: 100%;">
                 <tr style="width: 100%;">
@@ -329,8 +389,8 @@
                     <td style="width: 50%;"><iframe style="width: 100%;" src="mainframe.html"></iframe></td>
                 </tr>
             </table> -->
-            <div id="maintitle"></div>
-            <div id="mainbody"></div>
+            <!-- <div id="maintitle"></div> -->
+            <!-- <div id="mainbody"></div> -->
             
         </div> <!--  end of main frame -->
     </div> <!-- end of main page -->
@@ -390,6 +450,24 @@
 
     <script type="text/javascript" src="app.js"></script>
     <script type="text/javascript">
+        var myacceptregutlation = 0;
+
+        function checkacceptregulation(){
+            if (myacceptregutlation==0&&!getCookie("myacceptregutlation")){
+                document.getElementById("mainframe").hidden = true;
+                document.getElementById("loginstartpage").hidden = false;
+            } else {
+                document.getElementById("mainframe").hidden = false;
+                document.getElementById("loginstartpage").hidden = true;
+            }
+        }
+        checkacceptregulation();
+
+        function acceptregulation(){
+            myacceptregutlation=1;
+            setCookie("myacceptregutlation", 1, 1);
+            checkacceptregulation();
+        }
 
         function myupload(x,y){
             document.getElementById("myloading").hidden = false;
@@ -445,14 +523,18 @@
 
         var nowstatus;
         var nowfilelist;
+        var nowsubmitct;
         function checkstatus(x){
             var docRef = db.collection("societystatus").doc(x);
 
             docRef.get().then(function(doc) {
                 if (doc.exists) {
                     // console.log("Document data:", doc.data());
-                    console.log(doc.data().status);
+                    // console.log(doc.data().status);
                     nowstatus = doc.data().status;
+                    nowsubmitct = doc.data().submitct;
+                    if (!nowsubmitct)
+                        nowsubmitct = 0;
                     if (nowstatus==0){
                         //first state: form a
                         document.getElementById("mainframe").innerHTML = '<div class="mainbodytitle">上載登記文件(一）</div><table style="margin:30px; margin-left: 100px;  width: 70%;"><tr><td>表格A 基本資料</td><td></td><td><button class="ok" onclick="fillforma()">Fill In</button></td></tr>'
@@ -476,7 +558,7 @@
                                 document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
                                 document.getElementById("googleforminput2").value = mysociety+"|step1|form"+this.id[17];
                                 var file = e.target.files[0];
-                                myupload(file,mysociety+'/step1form'+this.id[17]+'.'+file.name.split('.')[1]);
+                                myupload(file,mysociety+'/step1form'+this.id[17]+'_'+nowsubmitct+'.'+file.name.split('.')[1]);
                                 //document.getElementById("ok"+this.id[17]).click();                                
                             }
                         }
@@ -510,7 +592,7 @@
                                 document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
                                 document.getElementById("googleforminput2").value = mysociety+"|step2|form"+this.id[17];
                                 var file = e.target.files[0];
-                                myupload(file,mysociety+'/step2form'+this.id[17]+'.'+file.name.split('.')[1]);
+                                myupload(file,mysociety+'/step2form'+this.id[17]+'_'+nowsubmitct+'.'+file.name.split('.')[1]);
                                 //document.getElementById("ok"+this.id[17]).click();                                
                             }
                         }
@@ -688,6 +770,8 @@
 
         function changeuser(){
             if (confirm("你要登入其他電郵嗎？")){
+                setCookie("myacceptregutlation",'',1);
+                setCookie("society", "", 1);
                 signOut();
             }
         }
@@ -697,7 +781,7 @@
                 // console.log(x.value);
                 var tempsocietylist = document.getElementsByClassName("societylist");
                 for (var j=0; j<tempsocietylist.length; j++){
-                    console.log(societylistid[tempsocietylist[j].innerHTML]);
+                    // console.log(societylistid[tempsocietylist[j].innerHTML]);
                     if (tempsocietylist[j].innerHTML.indexOf(x.value)!=-1||societylistid[tempsocietylist[j].innerHTML].indexOf(x.value.toUpperCase())!=-1){
                         // console.log(tempsocietylist[j].innerHTML);
                         tempsocietylist[j].hidden = false;
@@ -806,19 +890,19 @@
                 cell1.innerHTML = "Form A";
                 savefilelist();
 
-                var docRef = db.collection("societymemberlist").doc(mysociety);
-                docRef.set({
-                    memberlist: tempmemberlist,
-                    socenddate: forma1[1].value.split('-')[1],
-                    acceptman: '',
-                    socacceptdate: ''
-                })
-                .then(function(){
+                // var docRef = db.collection("societymemberlist").doc(mysociety);
+                // docRef.set({
+                //     memberlist: tempmemberlist,
+                //     socenddate: forma1[1].value.split('-')[1],
+                //     acceptman: '',
+                //     socacceptdate: ''
+                // })
+                // .then(function(){
 
-                })
-                .catch(function(error){
+                // })
+                // .catch(function(error){
 
-                });
+                // });
 
                 document.getElementById("formaarea").hidden = true;
             }
@@ -836,7 +920,8 @@
             var docRef = db.collection("societystatus").doc(mysociety);
             docRef.set({
                 filelist: tempfilelist,
-                status: nowstatus
+                status: nowstatus,
+                submitct: nowsubmitct
             })
             .then(function(){
                 nowfilelist = tempfilelist;
@@ -854,10 +939,12 @@
                 document.getElementById("googleforminput3").value = nowfilelist;
                 document.getElementById("form").submit();
                 nowstatus++;
+                nowsubmitct++;
                 var docRef = db.collection("societystatus").doc(mysociety);
                 docRef.set({
                     filelist: '',
-                    status: nowstatus
+                    status: nowstatus,
+                    submitct: nowsubmitct
                 })
                 .then(function(){
                     location.reload();
