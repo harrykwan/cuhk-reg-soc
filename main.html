@@ -155,6 +155,29 @@
             margin-bottom: 50px;
         }
 
+        .messagearea{
+            border-left: 2px solid #AAAAAA;
+            border-right: 2px solid #AAAAAA;
+            border-radius: 10px;
+            color: #dedede;
+            width: 89%;
+            height: 10%;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 20px;
+            padding: 20px;
+            padding-bottom: 40px;
+            overflow: hidden;
+            /*box-shadow: 2px 2px 2px;*/
+            background-color: #111111;
+            background-color: #151515;
+            /*margin-bottom: 50px;*/
+            /*padding: 50px;*/
+        }
+
         .regulationlist{
             padding-left: 80px;
             padding-top: 20px;
@@ -163,6 +186,14 @@
         .regulationlist>li{
             padding: 10px;
             font-size: 16px
+        }
+
+        .messagebody{
+            padding-left: 50px;
+            padding-top: 10px;
+            color: #ed2939;
+            font-family: ‘cwTeXYen’,'Noto Sans Tc',/*'FontAwesome', sans-serif;*/'Roboto', sans-serif;
+            font-size: 16px;
         }
 
     </style>
@@ -382,6 +413,9 @@
             </ul>
             <button onclick="acceptregulation()" class="mainbodytitle submitbutton" style="width: 200px; margin-left: 70%;">同意並繼續</button>
         </div>
+
+        <div hidden id="messagearea" class="messagearea"><div id="messagebody" class="messagebody"></div></div>
+
         <div id="mainframe">
             <!-- <table style="width: 100%;">
                 <tr style="width: 100%;">
@@ -524,6 +558,7 @@
         var nowstatus;
         var nowfilelist;
         var nowsubmitct;
+        var myfailmessage;
         function checkstatus(x){
             var docRef = db.collection("societystatus").doc(x);
 
@@ -531,10 +566,18 @@
                 if (doc.exists) {
                     // console.log("Document data:", doc.data());
                     // console.log(doc.data().status);
-                    nowstatus = doc.data().status;
-                    nowsubmitct = doc.data().submitct;
+                    var mydocdata = doc.data();
+                    nowstatus = mydocdata.status;
+                    nowsubmitct = mydocdata.submitct;
+                    myfailmessage = mydocdata.failmessage;
                     if (!nowsubmitct)
                         nowsubmitct = 0;
+                    if (myfailmessage){
+                        document.getElementById("messagearea").hidden = false;
+                        document.getElementById("messagebody").innerHTML = myfailmessage;
+                    } else {
+                        document.getElementById("messagearea").hidden = true;
+                    }
                     if (nowstatus==0){
                         //first state: form a
                         document.getElementById("mainframe").innerHTML = '<div class="mainbodytitle">上載登記文件(一）</div><table style="margin:30px; margin-left: 100px;  width: 70%;"><tr><td>表格A 基本資料</td><td></td><td><button class="ok" onclick="fillforma()">Fill In</button></td></tr>'
