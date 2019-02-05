@@ -599,9 +599,9 @@
                         for (var j=1; j<=12; j++){
                             document.getElementById("fileUploadControl"+j).onchange =  function(e){
                                 document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
-                                document.getElementById("googleforminput2").value = mysociety+"|step1|form"+this.id[17];
+                                document.getElementById("googleforminput2").value = mysociety+"|step1|form"+this.id.substring(17);
                                 var file = e.target.files[0];
-                                myupload(file,mysociety+'/step1form'+this.id[17]+'_'+nowsubmitct+'.'+file.name.split('.')[1]);
+                                myupload(file,mysociety+'/step1form'+this.id.substring(17)+'_'+nowsubmitct+'.'+file.name.split('.')[1]);
                                 //document.getElementById("ok"+this.id[17]).click();                                
                             }
                         }
@@ -633,9 +633,9 @@
                         for (var j=1; j<=12; j++){
                             document.getElementById("fileUploadControl"+j).onchange =  function(e){
                                 document.getElementById("googleforminput1").value = myuserdata.mail.split('@')[0]+'|'+myuserdata.displayName+'|'+myip;
-                                document.getElementById("googleforminput2").value = mysociety+"|step2|form"+this.id[17];
+                                document.getElementById("googleforminput2").value = mysociety+"|step2|form"+this.id.substring(17);
                                 var file = e.target.files[0];
-                                myupload(file,mysociety+'/step2form'+this.id[17]+'_'+nowsubmitct+'.'+file.name.split('.')[1]);
+                                myupload(file,mysociety+'/step2form'+this.id.substring(17)+'_'+nowsubmitct+'.'+file.name.split('.')[1]);
                                 //document.getElementById("ok"+this.id[17]).click();                                
                             }
                         }
