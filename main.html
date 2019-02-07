@@ -133,6 +133,10 @@
             color: #DDDDDD;
         }
 
+        .downloadlink2{
+            color: #DDDDDD;
+        }
+
         .loginstartpage{
             border-left: 2px solid #AAAAAA;
             border-right: 2px solid #AAAAAA;
@@ -387,6 +391,7 @@
             <hr>
             <div id="showusernamearea"></div>
         </div> <!-- end of main head -->
+
         <div id="loginstartpage" class="loginstartpage">
             <div class="mainbodytitle">請閱讀以下條款</div>
             <ul class="regulationlist">
@@ -394,39 +399,42 @@
             <a href="http://council.cusu.hk/cons/ACS_Ordinance.pdf">屬下團體章則</a>
             </li> -->
             <li>
-            <a class="downloadlink" target="_blank" href="http://council.cusu.hk/wp/wp-content/uploads/2018/07/%E5%B1%AC%E4%B8%8B%E5%9C%98%E9%AB%94%E6%A2%9D%E4%BE%8B-30-06-2018.pdf">屬下團體條例</a></li>
+            <a class="downloadlink2" target="_blank" href="http://council.cusu.hk/wp/wp-content/uploads/2018/07/%E5%B1%AC%E4%B8%8B%E5%9C%98%E9%AB%94%E6%A2%9D%E4%BE%8B-30-06-2018.pdf">屬下團體條例</a></li>
             <li>
-            <a class="downloadlink" target="_blank" href="http://council.cusu.hk/cons/ACS_Investigation_Procedures_Bylaw.pdf">屬下團體調查附則</a>
+            <a class="downloadlink2" target="_blank" href="http://council.cusu.hk/cons/ACS_Investigation_Procedures_Bylaw.pdf">屬下團體調查附則</a>
             </li>
             <li>
-            <a class="downloadlink" target="_blank" href="http://council.cusu.hk/cons/ACS_Rooms_Allocation_Bylaw.pdf">屬下團體會室分配附則</a>
+            <a class="downloadlink2" target="_blank" href="http://council.cusu.hk/cons/ACS_Rooms_Allocation_Bylaw.pdf">屬下團體會室分配附則</a>
             </li>
             <li>
-            <a class="downloadlink" target="_blank" href="http://council.cusu.hk/cons/ACS_Activities_Fund_Bylaw.pdf">屬下團體活動基金附則</a>
+            <a class="downloadlink2" target="_blank" href="http://council.cusu.hk/cons/ACS_Activities_Fund_Bylaw.pdf">屬下團體活動基金附則</a>
             </li>
             <li>
-            <a class="downloadlink" target="_blank" href="http://council.cusu.hk/cons/Bylaw_of_Annual_Conference_of_ACS.pdf">屬下團體週年聯席會議附則</a>
+            <a class="downloadlink2" target="_blank" href="http://council.cusu.hk/cons/Bylaw_of_Annual_Conference_of_ACS.pdf">屬下團體週年聯席會議附則</a>
             </li>
             <li>
-            <a class="downloadlink" target="_blank" href="http://council.cusu.hk/wp/wp-content/uploads/2015/07/%E5%B1%AC%E4%B8%8B%E5%9C%98%E9%AB%94%EF%BC%88%E6%AD%A3%E5%90%8D%EF%BC%89%E9%99%84%E5%89%87-2016-11-17.pdf">屬下團體（正名）附則</a>
+            <a class="downloadlink2" target="_blank" href="http://council.cusu.hk/wp/wp-content/uploads/2015/07/%E5%B1%AC%E4%B8%8B%E5%9C%98%E9%AB%94%EF%BC%88%E6%AD%A3%E5%90%8D%EF%BC%89%E9%99%84%E5%89%87-2016-11-17.pdf">屬下團體（正名）附則</a>
             </li>
             </ul>
             <button onclick="acceptregulation()" class="mainbodytitle submitbutton" style="width: 200px; margin-left: 70%;">同意並繼續</button>
         </div>
 
-        <div hidden id="messagearea" class="messagearea"><div id="messagebody" class="messagebody"></div></div>
+        <div hidden id="loginthirdpage">
+            <div hidden id="messagearea" class="messagearea"><div id="messagebody" class="messagebody"></div></div>
 
-        <div id="mainframe">
-            <!-- <table style="width: 100%;">
-                <tr style="width: 100%;">
-                    <td style="width: 50%;"><iframe style="width: 100%;" src="mainframe.html"></iframe></td>
-                    <td style="width: 50%;"><iframe style="width: 100%;" src="mainframe.html"></iframe></td>
-                </tr>
-            </table> -->
-            <!-- <div id="maintitle"></div> -->
-            <!-- <div id="mainbody"></div> -->
-            
-        </div> <!--  end of main frame -->
+            <div id="mainframe">
+                <!-- <table style="width: 100%;">
+                    <tr style="width: 100%;">
+                        <td style="width: 50%;"><iframe style="width: 100%;" src="mainframe.html"></iframe></td>
+                        <td style="width: 50%;"><iframe style="width: 100%;" src="mainframe.html"></iframe></td>
+                    </tr>
+                </table> -->
+                <!-- <div id="maintitle"></div> -->
+                <!-- <div id="mainbody"></div> -->
+                
+            </div> <!--  end of main frame -->
+        </div>
+
     </div> <!-- end of main page -->
 
     <div hidden id="formaarea" style="position: fixed; left: 0; right: 0; margin-left: auto; margin-right: auto; width: 80%; top: 100px; height: 70%; background: black; color: white; opacity: 0.8; padding:20px; overflow: hidden; border: 2px solid white;border-radius: 5px; font-size: 16px;">
@@ -488,10 +496,10 @@
 
         function checkacceptregulation(){
             if (myacceptregutlation==0&&!getCookie("myacceptregutlation")){
-                document.getElementById("mainframe").hidden = true;
+                document.getElementById("loginthirdpage").hidden = true;
                 document.getElementById("loginstartpage").hidden = false;
             } else {
-                document.getElementById("mainframe").hidden = false;
+                document.getElementById("loginthirdpage").hidden = false;
                 document.getElementById("loginstartpage").hidden = true;
             }
         }
@@ -808,6 +816,7 @@
                 setCookie("society", "", 1);
                 checkCookie();
                 document.getElementById("showusernamearea").innerHTML ='<span onclick="changeuser()">'+myuserdata.displayName+ '</span>';
+                document.getElementById("messagearea").hidden = true;
             }
         }
 
