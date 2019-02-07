@@ -200,6 +200,29 @@
             font-size: 16px;
         }
 
+        .choosetypebar{
+            margin-left: 125px;
+            margin-bottom: 100px;
+        }
+
+        .choosetypebar>span{
+            padding: 6px;
+            font-size: 16px;
+            padding-right: 50px;
+            padding-left: 50px;
+            text-align: center;
+            border-left: 1px solid grey;
+            border-right: 1px solid grey;
+            margin-right: 10px;
+            border-radius: 5px;
+            background-color: #222222;
+        }
+
+
+        .choosetypebar>span:hover{
+            background: #444444;
+        }
+
     </style>
 </head>
 
@@ -791,14 +814,27 @@
                 document.getElementById("mainframe").innerHTML = '';
                 checkstatus(mysociety);
             } else {
-                var tempoutput = '<div class="mainbodytitle">選擇所屬團體</div><br><br><br><div class="choosesocietybox"><input placeholder="Search Here" id="societyinput" class="societyinput" onkeydown="helpchoose(this)" type="text" style="border-bottom: 2px solid #AAAAAA;"><div class="societybox" style="margin-top: 0;">';
+                var tempoutput = '<div class="mainbodytitle">選擇所屬團體</div><br><br><br><div class="choosesocietybox"><input placeholder="Search your society name / code" id="societyinput" class="societyinput" onkeydown="helpchoose(this)" type="text" style="border-bottom: 2px solid #AAAAAA;"><div class="societybox" style="margin-top: 0;">';
                 for (var j=0; j<societylist.length; j++){
                     societylistid[societylist[j].name] = societylist[j].id;
                     // console.log(societylistid);
                     tempoutput += '<div class="societylist" onclick="choosesociety(this)">'+societylist[j].name+'</div>';
                 }
-                tempoutput+='<div style="height: 20px;"></div></div></div>'
+                tempoutput+='<div style="height: 20px;"></div></div></div><div id="choosetypebar" class="choosetypebar"><span>系會</span><span>院會</span></div><a class="downloadlink2" href="http://regsoc.cusu.hk/society" target="_blank" style="margin-left:125px;">society code reference</a>'
                 document.getElementById("mainframe").innerHTML = tempoutput;
+                var mytypebar = document.getElementById("choosetypebar").getElementsByTagName("span");
+                for (var j=0; j<mytypebar.length; j++){
+                    mytypebar[j].onclick = function(){
+                        var tempsocietylist = document.getElementsByClassName("societylist");
+                        for (var k=0; k<tempsocietylist.length; k++){
+                            if (tempsocietylist[k].innerHTML.indexOf(this.innerHTML)!=-1){
+                                tempsocietylist[k].hidden = false;
+                            } else {
+                                tempsocietylist[k].hidden = true;
+                            }
+                        }
+                    }
+                }
             }
         }
 
