@@ -490,7 +490,7 @@
             </table>
 
             <table id="membertable" style=" width: 80%;margin-left: 10%; margin-top: 3%; border: none;">
-                <tr style="border-bottom: 1px solid grey;"><td>職位</td><td>中文名稱</td><td>英文名稱</td><td>學生證編號</td><td>書院</td><td>學系</td><td>學年</td><td>電話</td></tr>
+                <tr style="border-bottom: 1px solid grey; text-align: center;"><td>職位</td><td>中文名稱</td><td>英文名稱</td><td>學生證編號</td><td>書院</td><td>學系</td><td>學年</td><td>電話</td></tr>
             </table>
             <hr>
             <table style=" width: 80%;margin-left: 10%; margin-top: 3%;">
@@ -498,7 +498,7 @@
             </table>
 
             <table id="membertable2" style=" width: 80%;margin-left: 10%; margin-top: 3%; border: none;">
-                <tr style="border-bottom: 1px solid grey;"><td>職位</td><td>中文名稱</td><td>英文名稱</td><td>學生證編號</td><td>書院</td><td>學系</td><td>學年</td><td>電話</td></tr>
+                <tr style="text-align: center; border-bottom: 1px solid grey;"><td>職位</td><td>中文名稱</td><td>英文名稱</td><td>學生證編號</td><td>書院</td><td>學系</td><td>學年</td><td>電話</td></tr>
             </table>
 
             <div style=" width: 80%;margin-left: 10%; margin-top: 3%; color: yellow;">*請輸入正確的課程代號，可於<a style="color: lightyellow; " target="_blank" href="http://www.res.cuhk.edu.hk/en-gb/general-information/program-codes">res.cuhk.edu.hk</a>尋找</div>
@@ -920,6 +920,29 @@
             document.getElementById("formaarea").hidden = true;
         }
 
+        function checktablevalid(x){
+            for (var j=0; j<x.length; j++){
+                if (j%8==3){
+                    //check sid
+                    if (/^\d+$/.test(x[j].value)==false||x[j].value.length!=10){
+                        alert('Please make they are valid sid');
+                        return false;
+                    }
+                }
+                if (j%8==3){
+                    //check sid
+                    if (/^\d+$/.test(x[j].value)==false||x[j].value.length!=10){
+                        alert('Please make they are valid sid');
+                    }
+                }
+                if (x[j].value==''){
+                    alert("Please fill in all the cell in the table");
+                    return false;
+                }
+            }
+            return true;
+        }
+
         function doneforma(){
             var memberlist = document.getElementById("membertable").getElementsByTagName("input");
             var memberlist2 = document.getElementById("membertable2").getElementsByTagName("input");
@@ -930,6 +953,13 @@
                 alert("Invalid Date formate");
                 return;
             }
+
+            if (checktablevalid(memberlist)==false||checktablevalid(memberlist2)==false){
+                
+                return;
+            }
+
+
 
             if (confirm("Are you sure?")){
                 
