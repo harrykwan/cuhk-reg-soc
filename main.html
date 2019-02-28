@@ -223,6 +223,10 @@
             background: #444444;
         }
 
+        .switchspan{
+             border-bottom: 1px dotted #DDDDDD;
+        }
+
     </style>
 </head>
 
@@ -810,7 +814,7 @@
                 mysociety=getCookie("society");
             // alert(mysociety);
             if (mysociety != "") {
-                document.getElementById("showusernamearea").innerHTML ='<span onclick="changeuser()">'+myuserdata.displayName+ '</span> @ <span onclick="changesociety()">'+mysociety+"</span>";
+                document.getElementById("showusernamearea").innerHTML ='<span class="switchspan" onclick="changeuser()">'+myuserdata.displayName+ '</span> @ <span class="switchspan" onclick="changesociety()">'+mysociety+"</span>";
                 document.getElementById("mainframe").innerHTML = '';
                 checkstatus(mysociety);
             } else {
