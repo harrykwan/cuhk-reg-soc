@@ -818,7 +818,7 @@
                 for (var j=0; j<societylist.length; j++){
                     societylistid[societylist[j].name] = societylist[j].id;
                     // console.log(societylistid);
-                    tempoutput += '<div class="societylist" onclick="choosesociety(this)">'+societylist[j].name+'</div>';
+                    tempoutput += '<span style="">'+societylist[j].id+'</span><div class="societylist" style="margin-bottom:10px;"  onclick="choosesociety(this)">'+societylist[j].name+'</div>';
                 }
                 tempoutput+='<div style="height: 20px;"></div></div></div><div id="choosetypebar" class="choosetypebar"><span>系會</span><span>院會</span></div><a class="downloadlink2" href="http://regsoc.cusu.hk/society" target="_blank" style="margin-left:125px;">society code reference</a>'
                 document.getElementById("mainframe").innerHTML = tempoutput;
@@ -829,8 +829,10 @@
                         for (var k=0; k<tempsocietylist.length; k++){
                             if (tempsocietylist[k].innerHTML.indexOf(this.innerHTML)!=-1){
                                 tempsocietylist[k].hidden = false;
+                                tempsocietylist[k].previousSibling.hidden = false;
                             } else {
                                 tempsocietylist[k].hidden = true;
+                                tempsocietylist[k].previousSibling.hidden = true;
                             }
                         }
                     }
