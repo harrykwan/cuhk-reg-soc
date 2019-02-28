@@ -820,7 +820,8 @@
                     // console.log(societylistid);
                     tempoutput += '<span style="">'+societylist[j].id+'</span><div class="societylist" style="margin-bottom:10px;"  onclick="choosesociety(this)">'+societylist[j].name+'</div>';
                 }
-                tempoutput+='<div style="height: 20px;"></div></div></div><div id="choosetypebar" class="choosetypebar"><span>系會</span><span>院會</span></div><a class="downloadlink2" href="http://regsoc.cusu.hk/society" target="_blank" style="margin-left:125px;">society code reference</a>'
+                tempoutput+='<div style="height: 20px;"></div></div></div><div id="choosetypebar" class="choosetypebar"><span>系會</span><span>院會</span></div>';
+                //+'<a class="downloadlink2" href="http://regsoc.cusu.hk/society" target="_blank" style="margin-left:125px;">society code reference</a>'
                 document.getElementById("mainframe").innerHTML = tempoutput;
                 var mytypebar = document.getElementById("choosetypebar").getElementsByTagName("span");
                 for (var j=0; j<mytypebar.length; j++){
@@ -875,8 +876,10 @@
                     if (tempsocietylist[j].innerHTML.indexOf(x.value)!=-1||societylistid[tempsocietylist[j].innerHTML].indexOf(x.value.toUpperCase())!=-1){
                         // console.log(tempsocietylist[j].innerHTML);
                         tempsocietylist[j].hidden = false;
+                        tempsocietylist[j].previousSibling.hidden = false;
                     } else {
                         tempsocietylist[j].hidden = true;
+                        tempsocietylist[j].previousSibling.hidden = true;
                     }
                 }
             },100)
