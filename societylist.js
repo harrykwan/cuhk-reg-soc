@@ -558,4 +558,8 @@ var societylist = [{
 	id: "XX-TST",
 	name: "香港中文大學學生會屬下團體系統測試學會",
 	status: ""
+},{
+	id: "SM-NRS2",
+	name: "香港中文大學學生會那打素護理學院院會(2019-2020)",
+	status: ""
 }]
