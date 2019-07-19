@@ -566,4 +566,8 @@ var societylist = [{
 	id: "CC-DOU2",
 	name: "香港中文大學學生會同人文化學會2019",
 	status: ""
+},{
+	id: "ZZ-NEW1",
+	name: "同行之友愛鄰社",
+	status: ""
 }]
