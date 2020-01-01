@@ -288,7 +288,7 @@
         }
 
         #mainhead:hover{
-          background-color: #605d5d;
+          /* background-color: #605d5d; */
         }
 
         #mainframe{
@@ -1177,6 +1177,17 @@
                 } else {
                     // doc.data() will be undefined in this case
                     console.log("No such document!");
+                    db.collection("societystatus").doc(x).set({
+                        filelist: "",
+                        status: 0,
+                        submitct: 0
+                    })               
+                    .then(function() {
+                        console.log("Document successfully written!");
+                    })
+                    .catch(function(error) {
+                        console.error("Error writing document: ", error);
+                    });
                 }
             }).catch(function(error) {
                 console.log("Error getting document:", error);
@@ -1241,7 +1252,7 @@
                     // console.log(societylistid);
                     tempoutput += '<span style="">'+societylist[j].id+'</span><div class="societylist" style="margin-bottom:10px;"  onclick="choosesociety(this)">'+societylist[j].name+'</div>';
                 }
-                tempoutput+='<div style="height: 20px;"></div></div></div><div id="choosetypebar" class="choosetypebar"><span>系會</span><span>院會</span></div>';
+                // tempoutput+='<div style="height: 20px;"></div></div></div><div id="choosetypebar" class="choosetypebar"><span>系會</span><span>院會院會</span></div>';
                 //+'<a class="downloadlink2" href="http://regsoc.cusu.hk/society" target="_blank" style="margin-left:125px;">society code reference</a>'
                 document.getElementById("mainframe").innerHTML = tempoutput;
                 var mytypebar = document.getElementById("choosetypebar").getElementsByTagName("span");
