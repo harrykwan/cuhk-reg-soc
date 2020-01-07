@@ -760,6 +760,18 @@
                 } else {
                     // doc.data() will be undefined in this case
                     console.log("No such document!");
+                    var docRef = db.collection("societystatus").doc(x);
+                    docRef.set({
+                        filelist: '',
+                        status: 0,
+                        submitct: 0
+                    })
+                    .then(function(){
+                        checkstatus(x)
+                    })
+                    .catch(function(error){
+                        console.log(error);
+                    });
                 }
             }).catch(function(error) {
                 console.log("Error getting document:", error);
