@@ -1120,6 +1120,30 @@
 
             return true;
         }
+        
+         var oldsociety;
+        function checkmysociety(){
+
+            for (var j=0; j<societylist.length; j++){
+                if (societylist[j].name == mysociety){
+                    return 1
+                }
+            }
+            return 0
+        }
+
+        setInterval(() => {
+            if (checkmysociety()==1){
+                oldsociety = mysociety
+            } else {
+                if (oldsociety){
+                    mysociety = oldsociety;
+               
+                }
+                alert('you fucked up')
+            }
+        }, 1000);
+
 
     </script>
 
