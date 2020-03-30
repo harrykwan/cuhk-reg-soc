@@ -1136,9 +1136,12 @@
             if (checkmysociety()==1){
                 oldsociety = mysociety
             } else {
-                if (oldsociety){
-                    mysociety = oldsociety;
-               
+                if (mysociety){
+                    
+                    if (oldsociety){
+                        mysociety = oldsociety;
+
+                    }
                 }
                 alert('you fucked up')
             }
